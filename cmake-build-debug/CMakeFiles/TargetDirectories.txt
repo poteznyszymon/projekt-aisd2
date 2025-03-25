@@ -1,3 +1,0 @@
-C:/Users/szymo/OneDrive/Pulpit/projekt/cmake-build-debug/CMakeFiles/projekt.dir
-C:/Users/szymo/OneDrive/Pulpit/projekt/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/szymo/OneDrive/Pulpit/projekt/cmake-build-debug/CMakeFiles/rebuild_cache.dir
