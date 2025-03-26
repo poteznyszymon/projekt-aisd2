@@ -1,0 +1,5 @@
+{
+    "roads": [
+        {"id": 1, "from": [0, 0], "to": [0, 0], "beer_capacity": 0, "barley_capacity": 0, "repair_cost": 0}
+    ]
+}
