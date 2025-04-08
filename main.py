@@ -11,9 +11,12 @@ def main():
     
     city = City()
     city.load_fields_from_json(os.path.join(DATA_DIR_PATH, "fields.json"))
+    city.load_inns_from_json(os.path.join(DATA_DIR_PATH, "inns.json"))
     
     for field in city.fields:
         print(f"Field ID: {field.id}, X: {field.x}, Y: {field.y}")
+    for inn in city.inns:
+        print(f"Inn ID: {inn.id}, X: {inn.x}, Y: {inn.y}")
 
 if __name__ == "__main__":
     main()
