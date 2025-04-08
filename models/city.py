@@ -2,6 +2,8 @@ import json
 from models.field import Field
 from models.inn import Inn
 from models.breweries import Breweries
+from models.road import Road
+from models.sector import Sector
 
 class City():
     def __init__(self):
@@ -25,3 +27,13 @@ class City():
         breweries_data = json.load(open(json_data))['breweries']
         for breweries in breweries_data:
             self.breweries.append(Breweries(breweries['id'], breweries['x'], breweries['y'], breweries['capacity']))
+            
+    def load_roads_from_json(self, json_data):
+        roads_data = json.load(open(json_data))['roads']
+        for road in roads_data:
+            self.roads.append(Road(road['id'], road['from'], road['to'], road['capacity'], road['repair_cost']))
+            
+    def load_sectors_from_json(self, json_data):
+        sectors_data = json.load(open(json_data))['shire_sectors']
+        for sector in sectors_data:
+            self.sectors.append(Sector(sector['id'], sector['polygon'], sector['yield']))
