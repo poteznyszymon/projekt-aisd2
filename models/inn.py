@@ -3,4 +3,4 @@ class Inn():
         self.id = id
         self.x = x
         self.y = y
-        self.demand = demand    
+        self.demand = demand
