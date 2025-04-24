@@ -1,0 +1,15 @@
+example 2 
+    przepływ:   70
+    koszt:      0
+
+example 3 
+    przepływ:   70
+    koszt:      0
+
+example 4 
+    przepływ:   450
+    koszt:      0
+
+example 4_1 
+    przepływ:   300
+    koszt:      0

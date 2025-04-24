@@ -26,8 +26,8 @@ class City():
 
     def load_breweries_from_json(self, json_data):
         breweries_data = json.load(open(json_data))['breweries']
-        for breweries in breweries_data:
-            self.breweries.append(Breweries(breweries['id'], breweries['x'], breweries['y'], breweries['capacity']))
+        for brewerie in breweries_data:
+            self.breweries.append(Breweries(brewerie['id'], brewerie['x'], brewerie['y'], brewerie['capacity']))
             
     def load_roads_from_json(self, json_data):
         roads_data = json.load(open(json_data))['roads']
