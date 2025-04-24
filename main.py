@@ -1,5 +1,6 @@
 import os
 from models.city import City
+import utils.geometry as geometry
 
 DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data")
 
@@ -10,7 +11,9 @@ def main():
     city.load_breweries_from_json(os.path.join(DATA_DIR_PATH, "breweries.json"))
     city.load_roads_from_json(os.path.join(DATA_DIR_PATH, "roads.json"))
     city.load_sectors_from_json(os.path.join(DATA_DIR_PATH, "sectors.json"))
+    city.assign_sector_yeild_to_fields()
 
+    
     for field in city.fields:
         print(f"Field ID: {field.id}, X: {field.x}, Y: {field.y}, sector_yield: {field.sector_yield}")
     for inn in city.inns:
@@ -20,7 +23,7 @@ def main():
     for road in city.roads:
         print(f"Road ID: {road.id}, Start: {road.start}, End: {road.end}, Capacity: {road.capacity}, Repair Cost: {road.repair_cost}")
     for sector in city.sectors:
-        print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
-
+        print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")        
+        
 if __name__ == "__main__":
     main()

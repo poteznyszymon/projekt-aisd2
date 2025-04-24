@@ -4,14 +4,15 @@ from models.inn import Inn
 from models.breweries import Breweries
 from models.road import Road
 from models.sector import Sector
+from utils.geometry import is_point_inside_polygon
 
 class City():
     def __init__(self):
-        self.fields = []
-        self.breweries = []
-        self.inns = []
-        self.roads = []
-        self.sectors = []
+        self.fields: list[Field] = []
+        self.breweries: list[Breweries] = []
+        self.inns: list[Inn] = []
+        self.roads: list[Road] = []
+        self.sectors: list[Sector] = []
         
     def load_fields_from_json(self, json_data):
         fields_data = json.load(open(json_data))['fields']
@@ -37,3 +38,10 @@ class City():
         sectors_data = json.load(open(json_data))['shire_sectors']
         for sector in sectors_data:
             self.sectors.append(Sector(sector['id'], sector['polygon'], sector['yield']))
+    
+    def assign_sector_yeild_to_fields(self):
+        for field in self.fields:
+            for sector in self.sectors:
+                if is_point_inside_polygon(field.to_point(), sector.to_point_list()):
+                    field.sector_yield = sector.sector_yield
+                    break
