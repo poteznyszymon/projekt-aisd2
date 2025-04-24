@@ -1,7 +1,7 @@
 import os
 from models.city import City
 
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data")
+DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_2")
 
 def main():
     city = City()
