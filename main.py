@@ -2,10 +2,6 @@ import os
 from models.city import City
 from models.algo import *
 
-# example 2 => przepływ: 70
-# example 3 => przepływ: 70
-# example 4 => przepływ: 70
-
 DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_3")
 
 def main():
