@@ -15,8 +15,8 @@ def main():
         print(f"Field ID: {field.id}, X: {field.x}, Y: {field.y}, sector_yield: {field.sector_yield}")
     for inn in city.inns:
         print(f"Inn ID: {inn.id}, X: {inn.x}, Y: {inn.y}")
-    for breweries in city.breweries:
-        print(f"Field ID: {breweries.id}, X: {breweries.x}, Y: {breweries.y}, Capacity: {breweries.capacity}")
+    for brewerie in city.breweries:
+        print(f"Brewerie ID: {brewerie.id}, X: {brewerie.x}, Y: {brewerie.y}, Capacity: {brewerie.capacity}")
     for road in city.roads:
         print(f"Road ID: {road.id}, Start: {road.start}, End: {road.end}, Capacity: {road.capacity}, Repair Cost: {road.repair_cost}")
     for sector in city.sectors:
