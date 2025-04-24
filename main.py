@@ -1,5 +1,6 @@
 import os
 from models.city import City
+from models.algo import *
 
 DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_2")
 
@@ -21,6 +22,10 @@ def main():
         print(f"Road ID: {road.id}, Start: {road.start}, End: {road.end}, Capacity: {road.capacity}, Repair Cost: {road.repair_cost}")
     for sector in city.sectors:
         print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
+
+    graph, source, sink = build_flow_network(city)
+    max_flow, min_cost = min_cost_flow(graph, source, sink, city)
+    print(f"Maksymalny przepływ: {max_flow}, Minimalny koszt: {min_cost}")
 
 if __name__ == "__main__":
     main()
