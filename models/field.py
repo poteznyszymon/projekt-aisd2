@@ -1,7 +1,7 @@
 from utils.geometry import Point
 
 class Field():
-    def __init__(self, id, x, y, sector_yield):
+    def __init__(self, id, x, y):
         self.id = id
         self.x = x
         self.y = y
