@@ -3,7 +3,7 @@ from models.city import City
 import utils.geometry as geometry
 from utils.algo import *
 
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_3")
+DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_1")
 
 def main():
     city = City()
@@ -26,9 +26,14 @@ def main():
     for sector in city.sectors:
         print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
 
+    # Build flow network and calculate min-cost max-flow
+    print("\n=== Calculating Optimal Flow ===")
     graph, source, sink = build_flow_network(city)
     max_flow, min_cost = min_cost_flow(graph, source, sink, city)
-    print(f"Maksymalny przepływ: {max_flow}, Minimalny koszt: {min_cost}")
+
+    print(f"\nResults:")
+    print(f"Maximum Flow: {max_flow} (total amount of beer delivered to inns)")
+    print(f"Minimum Cost: {min_cost} (total cost of road repairs)")
 
 if __name__ == "__main__":
     main()
