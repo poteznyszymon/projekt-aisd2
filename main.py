@@ -1,9 +1,9 @@
 import os
 from models.city import City
-import utils.geometry as geometry
-from utils.algo import *
+import utils.algo as algo
+import utils.plotter as plotter
 
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_3")
+DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_1")
 
 def main():
     city = City()
@@ -14,7 +14,7 @@ def main():
     city.load_sectors_from_json(os.path.join(DATA_DIR_PATH, "sectors.json"))
     city.assign_sector_yeild_to_fields()
 
-    
+    """
     for field in city.fields:
         print(f"Field ID: {field.id}, X: {field.x}, Y: {field.y}, sector_yield: {field.sector_yield}")
     for brewerie in city.breweries:
@@ -25,10 +25,12 @@ def main():
         print(f"Road ID: {road.id}, Start: {road.start}, End: {road.end}, Capacity: {road.capacity}, Repair Cost: {road.repair_cost}")
     for sector in city.sectors:
         print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
+    """
+    
+    graph = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
 
-    graph, source, sink = build_flow_network(city)
-    max_flow, min_cost = min_cost_flow(graph, source, sink, city)
-    print(f"Maksymalny przepływ: {max_flow}, Minimalny koszt: {min_cost}")
+    graph.print_graph()
+    plotter.plot_city(city.fields, city.breweries, city.inns, city.roads, city.sectors, show_capacity=True)
 
 if __name__ == "__main__":
     main()
