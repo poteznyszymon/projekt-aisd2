@@ -27,7 +27,9 @@ def main():
         print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
     """
     
-    graph = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
+    graph, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
+    max_flow = graph.edmonds_karp(0, sink)
+    print(f"Maksymalny przepływ: {max_flow}")
 
     graph.print_graph()
     plotter.plot_city(city.fields, city.breweries, city.inns, city.roads, city.sectors, show_capacity=True)
