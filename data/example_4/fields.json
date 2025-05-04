@@ -1,7 +1,7 @@
 {
     "fields": [
-        {"id": 1, "x": 1, "y": 3, "sector_yield": 100},
-        {"id": 2, "x": 2, "y": 1, "sector_yield": 150},
-        {"id": 3, "x": 3, "y": 1, "sector_yield": 200}
+        {"id": 1, "x": 1, "y": 7, "sector_yield": 100},
+        {"id": 2, "x": 4, "y": 1, "sector_yield": 150},
+        {"id": 3, "x": 7, "y": 1, "sector_yield": 200}
     ]
 }
