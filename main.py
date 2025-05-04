@@ -3,7 +3,7 @@ from models.city import City
 import utils.algo as algo
 import utils.plotter as plotter
 
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_1")
+DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_4")
 
 def main():
     city = City()
@@ -27,9 +27,13 @@ def main():
         print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
     """
     
-    graph, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
-    max_flow = graph.edmonds_karp(0, sink)
+    max_flow, graph = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
+    max_flow, graph = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
     print(f"Maksymalny przepływ: {max_flow}")
+
+    #for target in city.breweries:
+    #    print(f"Browar.capacity = {target.capacity}")
+
 
     graph.print_graph()
     plotter.plot_city(city.fields, city.breweries, city.inns, city.roads, city.sectors, show_capacity=True)

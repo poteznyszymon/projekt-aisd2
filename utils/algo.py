@@ -1,13 +1,10 @@
 from collections import deque
-from models.field import Field
-from models.inn import Inn
-from models.breweries import Breweries
-from models.road import Road
 
 class Edge:
     def __init__(self, to: int, capacity: int, cost: int):
         self.to = to              # numer wierzcholka docelowego
         self.capacity = capacity  # przepustowosc
+        self.flow = 0             # przepływ
         self.cost = cost          # koszt naprawy drogi
         self.rev = None           # wskaznik na krawedz odwrotna (do pozniejszego obliczania przeplywu)
 
@@ -63,6 +60,8 @@ class Graph:
                 u, edge = parent[v]
                 edge.capacity -= path_flow
                 edge.rev.capacity += path_flow
+                edge.flow += path_flow
+                edge.rev.flow -= path_flow
                 v = u
 
             max_flow += path_flow
@@ -75,41 +74,40 @@ class Graph:
             
             for edge in edges:
                 # Sprawdzamy czy krawedz odwrotna zostala juz wydrukowana
-                if (edge.to, edge.rev.to) not in visited_edges and (edge.rev.to, edge.to) not in visited_edges:
-                    print(f"  -> {edge.to} | capacity: {edge.capacity} | cost: {edge.cost}")
-                    visited_edges.add((node, edge.to))  # Dodajemy krawedz
-                    visited_edges.add((edge.to, node))  # Dodajemy krawedz odwrotna
+                #if (edge.to, edge.rev.to) not in visited_edges and (edge.rev.to, edge.to) not in visited_edges:
+                print(f"  -> {edge.to} | capacity: {edge.capacity} | flow: {edge.flow} | cost: {edge.cost}")
+                  #  visited_edges.add((node, edge.to))  # Dodajemy krawedz
+                    #visited_edges.add((edge.to, node))  # Dodajemy krawedz odwrotna
             print()
 
 
-def build_flow_graph(fields: list[Field], breweries: list[Breweries], inns: list[Inn], roads: list[Road]) -> Graph:
+def build_flow_graph(sources, targets, others, roads):
     graph = Graph()
-    
+
     node_id = 0
     point_to_node = {}
 
     # 1. Dodajemy source (sztuczny poczatkowy wiercholek dla sieci przeplywowej)
-    source = node_id
-    graph.add_node(source)
+    graph.add_node(node_id)
     node_id += 1
 
     # 2. Pola
-    for field in fields:
-        point = (field.x, field.y)
+    for source in sources:
+        point = (source.x, source.y)
         point_to_node[point] = node_id
         graph.add_node(node_id)
         node_id += 1
 
     # 3. Browary
-    for brewery in breweries:
-        point = (brewery.x, brewery.y)
+    for target in targets:
+        point = (target.x, target.y)
         point_to_node[point] = node_id
         graph.add_node(node_id)
         node_id += 1
 
     # 4. Karczmy
-    for inn in inns:
-        point = (inn.x, inn.y)
+    for other in others:
+        point = (other.x, other.y)
         point_to_node[point] = node_id
         graph.add_node(node_id)
         node_id += 1
@@ -119,9 +117,13 @@ def build_flow_graph(fields: list[Field], breweries: list[Breweries], inns: list
     graph.add_node(sink)
 
     # 6. Krawedzie Source -> Pola
-    for field in fields:
-        field_node = point_to_node[(field.x, field.y)]
-        graph.add_edge(source, field_node, field.sector_yield, cost=0)
+    for source in sources:
+        if hasattr(source, 'sector_yield'):
+            capacity = source.sector_yield
+        else:
+            capacity = source.capacity
+        source_node = point_to_node[(source.x, source.y)]
+        graph.add_edge(0, source_node, capacity, cost=0)
 
     # 7. Krawędzie na podstawie dróg (między polami, browarami, karczmami)
     for road in roads:
@@ -133,11 +135,13 @@ def build_flow_graph(fields: list[Field], breweries: list[Breweries], inns: list
             to_node = point_to_node[to_point]
             graph.add_edge(from_node, to_node, road.capacity, cost=road.repair_cost)
             # Dodajemy tez w druga strone bo drogi sa dwukierunkowe
-            graph.add_edge(to_node, from_node, road.capacity, cost=road.repair_cost)
+            #graph.add_edge(to_node, from_node, road.capacity, cost=road.repair_cost)
 
-    # 8. Krawedzie Karczmy -> Sink
-    for inn in inns:
-        inn_node = point_to_node[(inn.x, inn.y)]
-        graph.add_edge(inn_node, sink, inn.demand, cost=0)
+    # 8. Krawedzie Browary -> Sink
+    for target in targets:
+        target_node = point_to_node[(target.x, target.y)]
+        graph.add_edge(target_node, sink, float('inf'), cost=0)
 
-    return graph, sink - 1
+    max_flow = graph.edmonds_karp(0, sink)
+
+    return max_flow, graph
