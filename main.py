@@ -3,7 +3,7 @@ from models.city import City
 import utils.algo as algo
 import utils.plotter as plotter
 
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_1")
+DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_2")
 
 def main():
     city = City()
