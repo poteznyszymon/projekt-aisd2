@@ -47,7 +47,7 @@ def do_segments_intersects(p1: Point, p2: Point, p3: Point, p4: Point) -> bool:
     
     return False
 
-# Funckja ktora sprawdza czy punkt nalezy do wielokatu wypuklego 
+# Funkcja ktora sprawdza czy punkt nalezy do wielokatu wypuklego
 # metoda ktora zlicza czy ilosc przeciec prostej z punkt p z 
 # krawedziami wielokatu:
 # jezeli liczba przeciec jest nieparzysta to p lezy wewnatrz wielokatu

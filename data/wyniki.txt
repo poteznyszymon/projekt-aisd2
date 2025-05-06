@@ -13,3 +13,7 @@ example 4
 example 4_1 
     przepływ:   300
     koszt:      0
+
+example 5
+    przepływ:   200
+    koszt:      0

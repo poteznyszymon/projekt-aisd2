@@ -1,8 +1,8 @@
 {
     "fields": [
-        {"id": 1, "x": 3, "y": 6, "sector_yield": 70},
-        {"id": 2, "x": 7, "y" : 7, "sector_yield": 90},
-        {"id": 3, "x": 9, "y": 2, "sector_yield": 60},
-        {"id": 4, "x": 2, "y": 1, "sector_yield": 100}
+        {"id": 1, "x": 3, "y": 6, "sector_yield": 0},
+        {"id": 2, "x": 7, "y" : 7, "sector_yield": 0},
+        {"id": 3, "x": 9, "y": 2, "sector_yield": 0},
+        {"id": 4, "x": 2, "y": 1, "sector_yield": 0}
     ]
 }

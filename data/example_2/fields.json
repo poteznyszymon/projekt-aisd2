@@ -1,9 +1,13 @@
 {
     "fields": [
+<<<<<<< HEAD
         {"id": 1, "x": 1, "y": 1, "sector_yield": 100},
         {"id": 2, "x": 4, "y": 2, "sector_yield": 100},
         {"id": 3, "x": 8, "y": 8, "sector_yield": 100},
         {"id": 4, "x": 3, "y": 7, "sector_yield": 100},
         {"id": 5, "x": 7, "y": 2, "sector_yield": 100}
+=======
+        {"id": 1, "x": 3, "y": 1, "sector_yield": 100}
+>>>>>>> df06786d1d96206f63f9947874288f4a72585964
     ]
 }
