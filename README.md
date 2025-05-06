@@ -1,27 +1,16 @@
-Projekt symulacja maksymalnego przesy w miescie Shire
+# Projekt symulacja maksymalnego przesy w miescie Shire
 
-Struktura projektu:
-
-project/
-│
-├── main.py # Glowny program uruchamiajacy produkcje
-├── data/example_2/ # Przykladowe dane wejsciowe w formacie JSON
-├── models/ # Klasy obietkow uzywanych w projekcie
-├── utils/ #
-│ ├── algo.py # Algorytmy budowy i obliczania maksymalnego przesylu
-│ ├── geometry.py # Operacje geometryczne (np. sprawdzanie przynależności punktu do sektora)
-│ └── plotter.py # Wizualizacja miasta i sieci
-└── README.md # Dokumentacja projektu
-
-Wymagania:
+### Wymagania:
 
 - Pyhton 3.8+
 - matplotlib
 
-Uruchamianie:
-python main.py
+### Uruchamianie:
+`python main.py`
 
-Dane wejsciowe w katalogu data/example_1/ :
+### Struktuyra 
+
+### Dane wejsciowe w katalogu data/example_1/ :
 
 - fields.json: pola uprawne
 
