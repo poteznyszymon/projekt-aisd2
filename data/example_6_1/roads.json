@@ -1,0 +1,8 @@
+{
+    "roads": [
+        {"id": 1, "from": [1, 4], "to": [4, 4], "capacity": 300, "repair_cost": 0},
+        {"id": 2, "from": [4, 4], "to": [7, 1], "capacity": 300, "repair_cost": 4},
+        {"id": 3, "from": [4, 4], "to": [7, 4], "capacity": 300, "repair_cost": 2},
+        {"id": 4, "from": [4, 4], "to": [7, 7], "capacity": 300, "repair_cost": 1}
+     ]
+}

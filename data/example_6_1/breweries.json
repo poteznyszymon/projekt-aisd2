@@ -1,0 +1,7 @@
+{
+    "breweries" : [
+        {"id": 1, "x": 7, "y": 1, "capacity": 150},
+        {"id": 2, "x": 7, "y": 4, "capacity": 150},
+        {"id": 3, "x": 7, "y": 7, "capacity": 150}
+    ]
+}
