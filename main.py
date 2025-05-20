@@ -3,11 +3,7 @@ from models.city import City
 import utils.algo as algo
 import utils.plotter as plotter
 
-<<<<<<< HEAD
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_2")
-=======
 DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_4")
->>>>>>> df06786d1d96206f63f9947874288f4a72585964
 
 def main():
     city = City()
@@ -38,9 +34,8 @@ def main():
     #for target in city.breweries:
     #    print(f"Browar.capacity = {target.capacity}")
 
-
     graph.print_graph()
-    plotter.plot_city(city.fields, city.breweries, city.inns, city.roads, city.sectors, show_capacity=True)
+    plotter.plot_city(city, show_capacity=True)
 
 if __name__ == "__main__":
     main()
