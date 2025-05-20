@@ -3,8 +3,7 @@ from models.city import City
 import utils.algo as algo
 import utils.plotter as plotter
 
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_4")
-
+DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_4_1")
 def main():
     city = City()
     city.load_fields_from_json(os.path.join(DATA_DIR_PATH, "fields.json"))
@@ -26,16 +25,52 @@ def main():
     for sector in city.sectors:
         print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
     """
-    
-    max_flow, graph = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
-    max_flow, graph = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
-    print(f"Maksymalny przepływ: {max_flow}")
 
-    #for target in city.breweries:
-    #    print(f"Browar.capacity = {target.capacity}")
+    #Buduję graf pola -> browary
+    graph, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
+
+    #liczę max_flow z pola -> browary
+    max_flow_1 = graph.edmonds_karp(0, sink, 1)
+    print(f"Maksymalny przepływ z pól do browarów: {max_flow_1}, sink: {sink}")
+
+    # Buduję graf browary -> karczmy
+    graph, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
+
+    # liczę max_flow z browary -> karczmy
+    max_flow_2 = graph.edmonds_karp(0, sink, 1)
+    print(f"Maksymalny przepływ z browarów do karczm: {max_flow_2}, sink: {sink}")
+
+    # liczę max_flow całego miasta
+    max_flow=min(max_flow_1, max_flow_2)
+    print(f"Maksymalny przepływ: {max_flow}, sink: {sink}")
+
+    # Tworze graf dla pola -> browary, browary -> karczmy
+    graph_1, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
+
+    graph_2, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
+    print("BXB: ", graph_1.breweries_dict)
+    print("BXB: ", graph_1.breweries_dict_rev)
+    print("BXB: ", graph_2.breweries_dict)
+    print("BXB: ", graph_2.breweries_dict_rev)
+
+
+    # Wywołuje funkcje szukającą
+    min_cost = [1000]
+    repair_list = []
+    min_cost, graph_1_1, graph_2_1 = algo.test(graph_1, graph_2, 0, sink, max_flow, 0, min_cost, repair_list, -1)
+
+    print("   XXXX   ")
+    print("   XXXX   ")
+    print("   XXXX   ")
+    graph_1_1.print_graph()
+    graph_2_1.print_graph()
+    print(f"Maksymalny przepływ: {max_flow}, minimalny koszt: {min_cost}, sink: {sink}")
+
+
 
     graph.print_graph()
     plotter.plot_city(city, show_capacity=True)
+
 
 if __name__ == "__main__":
     main()
