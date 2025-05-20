@@ -88,6 +88,10 @@ class Graph:
             max_flow += path_flow
         return max_flow
         
+    def add_bidirectional_edge(self, node1, node2, capacity, cost=0):
+        self.add_edge(node1, node2, capacity, cost)
+        self.add_edge(node2, node1, capacity, cost)
+        
     def print_graph(self):
         for node, edges in self.graph.items():
             print(f"Wierzcholek {node}:")

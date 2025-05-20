@@ -68,7 +68,8 @@ def main():
 
 
 
-    plotter.plot_city(city.fields, city.breweries, city.inns, city.roads, city.sectors, show_capacity=True)
+    graph.print_graph()
+    plotter.plot_city(city, show_capacity=True)
 
 
 if __name__ == "__main__":
