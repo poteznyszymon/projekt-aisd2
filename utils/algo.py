@@ -12,7 +12,6 @@ class Edge:
 class Graph:
     def __init__(self):
         self.graph = {}  # slownik: wierzcholek -> lista krawedzi
-        self.edges = []
         self.paid_edges = []  # tu zapisujemy tylko płatne krawędzie
         self.breweries_dict = {}
         self.breweries_dict_rev = {}
@@ -29,7 +28,7 @@ class Graph:
         self.graph[start].append(forward)
         self.graph[end].append(backward)
 
-        self.edges.append(forward)
+
         if cost > 0:
             self.paid_edges.append(forward)
 
@@ -142,6 +141,7 @@ def test(graph_1, graph_2, source, sink, max_flow, min_cost, repair_list, napraw
         return min_cost[0], graph_1_copy, graph_2_copy
 
     max_flow_1 = graph_1_copy.edmonds_karp(source, sink, 2)
+
 
     for edge in graph_2_copy.graph[source]:
         for edge_1 in graph_1_copy.graph[graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]]:

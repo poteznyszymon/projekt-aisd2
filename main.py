@@ -27,21 +27,26 @@ def main():
     """
 
     #Buduję graf pola -> browary
-    graph, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
-
-    #liczę max_flow z pola -> browary
-    max_flow_1 = graph.edmonds_karp(0, sink, 1)
-    print(f"Maksymalny przepływ z pól do browarów: {max_flow_1}, sink: {sink}")
+    graph_1, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
 
     # Buduję graf browary -> karczmy
-    graph, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
+    graph_2, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
+
+    #liczę max_flow z pola -> browary
+    max_flow = graph_1.edmonds_karp(0, sink, 1)
+    print(f"Maksymalny przepływ z pól do browarów: {max_flow}, sink: {sink}")
+
+    for edge in graph_2.graph[0]:
+        for edge_1 in graph_1.graph[graph_1.breweries_dict_rev[graph_2.breweries_dict[edge.to]]]:
+            if edge_1.to == sink:
+                edge.capacity = edge_1.flow
+                edge.rev.capacity = edge_1.flow
 
     # liczę max_flow z browary -> karczmy
-    max_flow_2 = graph.edmonds_karp(0, sink, 1)
-    print(f"Maksymalny przepływ z browarów do karczm: {max_flow_2}, sink: {sink}")
+    max_flow = graph_2.edmonds_karp(0, sink, 1)
+    print(f"Maksymalny przepływ z browarów do karczm: {max_flow}, sink: {sink}")
 
     # liczę max_flow całego miasta
-    max_flow=min(max_flow_1, max_flow_2)
     print(f"Maksymalny przepływ: {max_flow}, sink: {sink}")
 
     # Tworze graf dla pola -> browary, browary -> karczmy
