@@ -6,7 +6,7 @@ from models.sector import Sector
 from models.road import Road
 import random
 import numpy as np
-from scipy.spatial import Delaunay  # Zmieniono import na Delaunay
+from scipy.spatial import Delaunay
 
 
 class Generator:
@@ -27,13 +27,13 @@ class Generator:
             number_of_inns,
             percentage_of_broken_roads
     ):
-        # Generowanie losowych pól uprawnych
+        # Generowanie losowych pol
         for i in range(number_of_fields):
             x, y = self._get_unique_point()
             random_field: Field = Field(len(self.used_points), x, y, 10)
             self.city.fields.append(random_field)
 
-        # Generowanie losowych browarów
+        # Generowanie losowych browarow
         for i in range(number_of_breweries):
             x, y = self._get_unique_point()
             random_capacity = random.randint(40, 200)
@@ -69,19 +69,15 @@ class Generator:
             # do algorytmu trangualcji wymagane sa co najmniej 3 punkty
             return
         else:
-            # Krok 1: Wykonaj Triangulację Delaunaya
-            # points muszą być numpy array
             tri = Delaunay(points)
-
-            # Krok 2: Wyodrębnij unikalne krawędzie z trójkątów Delaunaya
             # Kazdy simplex to krotka indeksow punktow
-            # np. (0, 1, 2) oznacza trójkąt z punktów o indeksach 0, 1, 2
-            # Z tego trójkąta powstają 3 krawędzie: (0,1), (1,2), (2,0)
+            # (0, 1, 2) oznacza trojkat z punktow o indeksach 0, 1, 2
+            # z tego trojkata powstają 3 krawedzie: (0,1), (1,2), (2,0)
 
             edges = set()
             for simplex in tri.simplices:
-                # Krawędzie trójkąta (simplex): (p0,p1), (p1,p2), (p2,p0)
-                # Sortujemy krotkę (min(i,j), max(i,j)) aby mieć unikalną reprezentację krawędzi
+                # krawedzie trojkata (simplex): (p0,p1), (p1,p2), (p2,p0)
+                # Sortujemy krotke (min(i,j), max(i,j)) aby miec unikalna reprezentacje krawedzi
                 edges.add(tuple(sorted((simplex[0], simplex[1]))))
                 edges.add(tuple(sorted((simplex[1], simplex[2]))))
                 edges.add(tuple(sorted((simplex[2], simplex[0]))))
