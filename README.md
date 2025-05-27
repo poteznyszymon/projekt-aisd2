@@ -49,3 +49,10 @@ Przekazujemy w tych funkcjach obiekt punktu który posiada poprostu współrzęd
     show_capacity=False,
     show_sector_yield=True
     )`
+
+`data_generator.py` Funkcja ktora zwraca losowo wygenrowane miasto na podstawie danych przekazanych przez uzytkownika
+- `city: City =  Generator(number_of_fields,
+            number_of_breweries,
+            number_of_inns,
+            percentage_of_broken_roads)`
+mozemy przekazac jaka ma byc liczba pol uprawnych, liczba browarow, liczba karcz oraz jaki procent drog ma byc zepsuty
