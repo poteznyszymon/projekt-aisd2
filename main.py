@@ -2,8 +2,9 @@ import os
 from models.city import City
 import utils.algo as algo
 import utils.plotter as plotter
+from utils.data_generator import Generator
 
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_4_1")
+DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_1")
 def main():
     city = City()
     city.load_fields_from_json(os.path.join(DATA_DIR_PATH, "fields.json"))
@@ -24,7 +25,7 @@ def main():
         print(f"Road ID: {road.id}, Start: {road.start}, End: {road.end}, Capacity: {road.capacity}, Repair Cost: {road.repair_cost}")
     for sector in city.sectors:
         print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
-    """
+    
 
     #Buduję graf pola -> browary
     graph, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
@@ -71,6 +72,11 @@ def main():
     graph.print_graph()
     plotter.plot_city(city, show_capacity=True)
 
+    """
+    random_generator = Generator(3, 3, 3, 50)
+    plotter.plot_city(random_generator.city, show_capacity=True)
+
 
 if __name__ == "__main__":
     main()
+
