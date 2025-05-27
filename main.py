@@ -3,7 +3,7 @@ from models.city import City
 import utils.algo as algo
 import utils.plotter as plotter
 
-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_4_1")
+DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_6_2")
 def main():
     city = City()
     city.load_fields_from_json(os.path.join(DATA_DIR_PATH, "fields.json"))
@@ -48,29 +48,19 @@ def main():
     graph_1, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
 
     graph_2, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
-    print("BXB: ", graph_1.breweries_dict)
-    print("BXB: ", graph_1.breweries_dict_rev)
-    print("BXB: ", graph_2.breweries_dict)
-    print("BXB: ", graph_2.breweries_dict_rev)
 
 
     # Wywołuje funkcje szukającą
-    min_cost = [1000]
+    min_cost = [float('inf')]
     repair_list = []
-    min_cost, graph_1_1, graph_2_1 = algo.test(graph_1, graph_2, 0, sink, max_flow, 0, min_cost, repair_list, -1)
-
-    print("   XXXX   ")
-    print("   XXXX   ")
-    print("   XXXX   ")
+    min_cost, graph_1_1, graph_2_1 = algo.test(graph_1, graph_2, 0, sink,  max_flow, min_cost, repair_list, -1)
     graph_1_1.print_graph()
     graph_2_1.print_graph()
     print(f"Maksymalny przepływ: {max_flow}, minimalny koszt: {min_cost}, sink: {sink}")
 
 
 
-    graph.print_graph()
     plotter.plot_city(city, show_capacity=True)
-
 
 if __name__ == "__main__":
     main()
