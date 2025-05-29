@@ -14,7 +14,6 @@ def main():
     city.load_sectors_from_json(os.path.join(DATA_DIR_PATH, "sectors.json"))
     city.assign_sector_yeild_to_fields()
 
-    """
     for field in city.fields:
         print(f"Field ID: {field.id}, X: {field.x}, Y: {field.y}, sector_yield: {field.sector_yield}")
     for brewerie in city.breweries:
@@ -67,15 +66,8 @@ def main():
     graph_2_1.print_graph()
     print(f"Maksymalny przepływ: {max_flow}, minimalny koszt: {min_cost}, sink: {sink}")
 
-
-
     graph.print_graph()
     plotter.plot_city(city, show_capacity=True)
-
-    """
-    random_generator = Generator(3, 3, 3, 50)
-    plotter.plot_city(random_generator.city, show_capacity=True)
-
 
 if __name__ == "__main__":
     main()

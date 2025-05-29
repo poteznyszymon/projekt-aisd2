@@ -8,8 +8,8 @@ def plot_city(
     ):
     # Staly rozmiar miasta 10 x 10
     plt.figure(figsize=(7, 7))
-    plt.xlim(-1, 11)
-    plt.ylim(-1, 11)
+    plt.xlim(0, 10)
+    plt.ylim(0, 10)
     plt.title("Mapa miasta Shire")
 
     colors = ["gold", "purple", "blueviolet", "hotpink"]
