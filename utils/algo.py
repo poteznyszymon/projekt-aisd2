@@ -12,7 +12,6 @@ class Edge:
 class Graph:
     def __init__(self):
         self.graph = {}  # slownik: wierzcholek -> lista krawedzi
-        self.edges = []
         self.paid_edges = []  # tu zapisujemy tylko płatne krawędzie
         self.breweries_dict = {}
         self.breweries_dict_rev = {}
@@ -29,7 +28,7 @@ class Graph:
         self.graph[start].append(forward)
         self.graph[end].append(backward)
 
-        self.edges.append(forward)
+
         if cost > 0:
             self.paid_edges.append(forward)
 
@@ -88,10 +87,6 @@ class Graph:
             max_flow += path_flow
         return max_flow
         
-    def add_bidirectional_edge(self, node1, node2, capacity, cost=0):
-        self.add_edge(node1, node2, capacity, cost)
-        self.add_edge(node2, node1, capacity, cost)
-        
     def print_graph(self):
         for node, edges in self.graph.items():
             print(f"Wierzcholek {node}:")
@@ -105,50 +100,30 @@ class Graph:
                     #visited_edges.add((edge.to, node))  # Dodajemy krawedz odwrotna
             print()
 
-def test(graph_1, graph_2, source, sink, max_flow, current_flow, min_cost, repair_list, napraw):
+def test(graph_1, graph_2, source, sink, max_flow, min_cost, repair_list, napraw):
     if napraw == -1:
-        print(f"TEST 0")
         graph_1_copy = copy.deepcopy(graph_1)
         graph_2_copy = copy.deepcopy(graph_2)
         current_cost = 0
         max_flow_1 = graph_1_copy.edmonds_karp(source, sink, 2)
-        """print("Z Browarów do sink")
-        for edge in graph_1_copy.graph[sink]:
-            # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
-            if edge.rev:
-                print(f"[Node_id: {edge.to}, ID_czegos: {graph_1_copy.breweries_dict[edge.to]}, {edge.rev.flow} / {edge.rev.capacity}]")"""
 
-        # print("Z source do Browarów 1")
         for edge in graph_2_copy.graph[source]:
-            # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
-
             if edge.rev:
-                # print(f"[Node_id: {edge.to}, ID_czegos: {graph_2_copy.breweries_dict[edge.to]}, {edge.flow} / {edge.capacity}]")
-                # print(f"   {graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]}")
                 for edge_1 in graph_1_copy.graph[graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]]:
                     if edge_1.to == sink:
-                        # print(f"      edge {edge_1.to}, flow: {edge_1.flow} / {edge_1.rev.capacity}, EDGE: {edge.capacity}")
                         edge.capacity = -edge_1.rev.flow
                         edge.rev.capacity = -edge_1.rev.flow
 
         max_flow_2 = graph_2_copy.edmonds_karp(source, sink, 2)
         current_flow = min(max_flow_1, max_flow_2)
-        print(f"Koszt: {current_cost}, przepływ: {current_flow}, naprawiono: {0} / {len(graph_1_copy.paid_edges)}, {max_flow_1}, {max_flow_2}")
 
         if current_flow >= max_flow:
             min_cost[0] = current_cost
-            print(f"Nowy minimalny koszt znaleziony: {min_cost[0]}, dla napraw: 0")
             return min_cost[0], graph_1_copy, graph_2_copy
-        print("GRAF_1")
-        graph_1_copy.print_graph()
-        print("GRAF_2")
-        graph_2_copy.print_graph()
 
-    print("NOWA REKURENCJA")
+    # W kolejnych rekurencjach kopiujemy listę napraw i kopiujemy grafy
     graph_1_copy = copy.deepcopy(graph_1)
     graph_2_copy = copy.deepcopy(graph_2)
-
-    # W kolejnych rekurencjach kopiujemy listę napraw i modyfikujemy grafy
     local_repair_list = repair_list.copy()
 
     if napraw >= 0:
@@ -156,66 +131,31 @@ def test(graph_1, graph_2, source, sink, max_flow, current_flow, min_cost, repai
 
     current_cost = 0
     for i in local_repair_list:
-        print(f"Repairing {i} za {graph_1_copy.paid_edges[i].cost}")
         current_cost += graph_1_copy.paid_edges[i].cost
         graph_1_copy.paid_edges[i].cost = 0
         graph_1_copy.paid_edges[i].rev.cost = 0
         graph_2_copy.paid_edges[i].cost = 0
         graph_2_copy.paid_edges[i].rev.cost = 0
-    print(f"Current cost: {current_cost}")
+
+    if current_cost > min_cost[0]:
+        return min_cost[0], graph_1_copy, graph_2_copy
 
     max_flow_1 = graph_1_copy.edmonds_karp(source, sink, 2)
-    """print("Z Browarów do sink")
-    for edge in graph_1_copy.graph[sink]:
-        # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
-        if edge.rev:
-            print(f"[Node_id: {edge.to}, ID_czegos: {graph_1_copy.breweries_dict[edge.to]}, {edge.rev.flow} / {edge.rev.capacity}]")"""
 
-    #print("Z source do Browarów 1")
+
     for edge in graph_2_copy.graph[source]:
-        # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
-        
-        if edge.rev:
-            #print(f"[Node_id: {edge.to}, ID_czegos: {graph_2_copy.breweries_dict[edge.to]}, {edge.flow} / {edge.capacity}]")
-            #print(f"   {graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]}")
-            for edge_1 in graph_1_copy.graph[graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]]:
-                if edge_1.to == sink:
-                    #print(f"      edge {edge_1.to}, flow: {edge_1.flow} / {edge_1.rev.capacity}, EDGE: {edge.capacity}")
-                    edge.capacity = -edge_1.rev.flow
-                    edge.rev.capacity = -edge_1.rev.flow
+        for edge_1 in graph_1_copy.graph[graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]]:
+            if edge_1.to == sink:
+                edge.capacity = edge_1.flow
+                edge.rev.capacity = edge_1.flow
 
     max_flow_2 = graph_2_copy.edmonds_karp(source, sink, 2)
-    """print("Z source do Browarów 2")
-    for edge in graph_2_copy.graph[source]:
-        # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
-        if edge.rev:
-            print(f"[Node_id: {edge.to}, ID_czegos: {graph_2_copy.breweries_dict[edge.to]}, {edge.flow} / {edge.capacity}]")
-
-    print("Z karczm do sink")
-    for edge in graph_2_copy.graph[sink]:
-        if edge.rev:
-            print(f"[Node_id: {edge.to}, {edge.rev.flow} / {edge.rev.capacity}]")"""
-
     current_flow = min(max_flow_1, max_flow_2)
-    #print()
-    #print()
-    #print("GRAF_1")
-    #graph_1_copy.print_graph()
-    #print("GRAF_2")
-    #graph_2_copy.print_graph()
-
-    print(f"Koszt: {current_cost}, przepływ: {current_flow}, naprawiono: {len(local_repair_list)} / {len(graph_1_copy.paid_edges)}, {max_flow_1}, {max_flow_2}")
-    for i in local_repair_list:
-        print(f"[{i}]")
-
-    #print(f"Browarów: {len(graph_1.breweries_dict)}")
-    #print(graph_1_copy.breweries_dict)
 
     # Sprawdzenie czy osiągnięto wymagany przepływ
     if current_flow >= max_flow:
         if current_cost < min_cost[0]:
             min_cost[0] = current_cost
-            print(f"Nowy minimalny koszt znaleziony: {min_cost[0]}, dla napraw: {local_repair_list}")
         return min_cost[0], graph_1_copy, graph_2_copy
 
     # Próba naprawienia kolejnych krawędzi
@@ -229,7 +169,6 @@ def test(graph_1, graph_2, source, sink, max_flow, current_flow, min_cost, repai
                     source,
                     sink,
                     max_flow,
-                    current_flow,
                     min_cost,
                     local_repair_list,
                     i
