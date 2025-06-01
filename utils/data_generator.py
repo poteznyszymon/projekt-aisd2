@@ -10,44 +10,47 @@ from scipy.spatial import Delaunay
 
 
 class Generator:
-    city: City = City()
-    used_points = []
-
-    def _get_unique_point(self):
-        while True:
-            point = [round(random.uniform(0, 10), 1), round(random.uniform(0, 10), 1)]
-            if point not in self.used_points:
-                self.used_points.append(point)
-                return point
-
     def __init__(
-            self,
-            number_of_fields,
-            number_of_breweries,
-            number_of_inns,
-            percentage_of_broken_roads
+        self,
+        number_of_fields,
+        number_of_breweries,
+        number_of_inns,
+        percentage_of_broken_roads
     ):
-        # Generowanie losowych pol
-        for i in range(number_of_fields):
-            x, y = self._get_unique_point()
-            random_field: Field = Field(len(self.used_points), x, y, 10)
-            self.city.fields.append(random_field)
+        self.city = City()
 
-        # Generowanie losowych browarow
-        for i in range(number_of_breweries):
-            x, y = self._get_unique_point()
-            random_capacity = random.randint(40, 200)
-            random_breweries: Breweries = Breweries(len(self.used_points), x, y, random_capacity)
-            self.city.breweries.append(random_breweries)
+        # tworzenie siatki punktów z odstepem 0.1 w zakresie 0–10
+        grid_points = [[round(x, 1), round(y, 1)]
+                       for x in np.arange(0, 10.1, 0.1)
+                       for y in np.arange(0, 10.1, 0.1)]
+        random.shuffle(grid_points)
+
+        def get_next_point():
+            print(grid_points[-1])
+            return grid_points.pop()
+
+
+        # generowanie losowych pol
+        for _ in range(number_of_fields):
+            x, y = get_next_point()
+            field = Field(len(self.city.fields), x, y, 10)
+            self.city.fields.append(field)
+
+        # generowanie losowych browarow
+        for _ in range(number_of_breweries):
+            x, y = get_next_point()
+            capacity = random.randint(40, 200)
+            brewery = Breweries(len(self.city.breweries), x, y, capacity)
+            self.city.breweries.append(brewery)
 
         # Generowanie losowych karczm
-        for i in range(number_of_inns):
-            x, y = self._get_unique_point()
-            random_demand = random.randint(40, 200)
-            random_inn: Inn = Inn(len(self.used_points), x, y, random_demand)
-            self.city.inns.append(random_inn)
+        for _ in range(number_of_inns):
+            x, y = get_next_point()
+            demand = random.randint(40, 200)
+            inn = Inn(len(self.city.inns), x, y, demand)
+            self.city.inns.append(inn)
 
-        # Generowanie losowych sektorow
+        # generowanie losowych sektorow
         x_1 = random.randint(2, 8)
         x_2 = random.randint(2, 8)
         y_1 = random.randint(2, 8)
@@ -62,37 +65,35 @@ class Generator:
             sector = Sector(i, data[i], random.randint(80, 180))
             self.city.sectors.append(sector)
 
-        points = np.array(self.used_points)
+        # przygotowanie punktow do triangulacji
+        all_points = []
+        all_points.extend([[f.x, f.y] for f in self.city.fields])
+        all_points.extend([[b.x, b.y] for b in self.city.breweries])
+        all_points.extend([[inn.x, inn.y] for inn in self.city.inns])
+
+        points = np.array(all_points)
         num_points = len(points)
 
         if num_points < 3:
-            # do algorytmu trangualcji wymagane sa co najmniej 3 punkty
+            # Do triangulacji potrzebne sa co najmniej 3 punkty
             return
-        else:
-            tri = Delaunay(points)
-            # Kazdy simplex to krotka indeksow punktow
-            # (0, 1, 2) oznacza trojkat z punktow o indeksach 0, 1, 2
-            # z tego trojkata powstają 3 krawedzie: (0,1), (1,2), (2,0)
 
-            edges = set()
-            for simplex in tri.simplices:
-                # krawedzie trojkata (simplex): (p0,p1), (p1,p2), (p2,p0)
-                # Sortujemy krotke (min(i,j), max(i,j)) aby miec unikalna reprezentacje krawedzi
-                edges.add(tuple(sorted((simplex[0], simplex[1]))))
-                edges.add(tuple(sorted((simplex[1], simplex[2]))))
-                edges.add(tuple(sorted((simplex[2], simplex[0]))))
+        # tworzenie triangulacji delaunaya
+        tri = Delaunay(points)
+        edges = set()
+        for simplex in tri.simplices:
+            edges.add(tuple(sorted((simplex[0], simplex[1]))))
+            edges.add(tuple(sorted((simplex[1], simplex[2]))))
+            edges.add(tuple(sorted((simplex[2], simplex[0]))))
 
-            id = 0
-            edges = list(edges)
-            num_broken_roads = int(len(edges) * (percentage_of_broken_roads / 100))
-            broken_indices = set(random.sample(range(len(edges)), num_broken_roads))
+        edges = list(edges)
+        num_broken_roads = int(len(edges) * (percentage_of_broken_roads / 100))
+        broken_indices = set(random.sample(range(len(edges)), num_broken_roads))
 
-            for idx, (i, j) in enumerate(edges):
-                p1 = points[i]
-                p2 = points[j]
-
-                repair_cost = random.randint(10, 40) if idx in broken_indices else 0
-
-                road = Road(id, p1.tolist(), p2.tolist(), random.randint(40, 80), repair_cost)
-                self.city.roads.append(road)
-                id += 1
+        # tworzenie drog
+        for idx, (i, j) in enumerate(edges):
+            p1 = points[i]
+            p2 = points[j]
+            repair_cost = random.randint(10, 40) if idx in broken_indices else 0
+            road = Road(idx, p1.tolist(), p2.tolist(), random.randint(40, 80), repair_cost)
+            self.city.roads.append(road)

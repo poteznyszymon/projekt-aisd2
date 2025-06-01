@@ -3,10 +3,12 @@ from models.city import City
 import utils.algo as algo
 import utils.plotter as plotter
 from utils.data_generator import Generator
+import time
 
 DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_6_2")
 
 def main():
+    start = time.time()
     city = City()
     city.load_fields_from_json(os.path.join(DATA_DIR_PATH, "fields.json"))
     city.load_inns_from_json(os.path.join(DATA_DIR_PATH, "inns.json"))
@@ -25,13 +27,17 @@ def main():
         print(f"Road ID: {road.id}, Start: {road.start}, End: {road.end}, Capacity: {road.capacity}, Repair Cost: {road.repair_cost}")
     for sector in city.sectors:
         print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
-    
+
+
+    # maks 3400 do kazdego po rowno tyle sie miesci na mapie 10 na 10 jezeli sa odddalone o 0.1
+    random_city = Generator(500,500,500,0).city
+    random_city.assign_sector_yeild_to_fields()
 
     #Buduję graf pola -> browary
-    graph_1, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
+    graph_1, sink = algo.build_flow_graph(random_city.fields, random_city.breweries, random_city.inns, random_city.roads)
 
     # Buduję graf browary -> karczmy
-    graph_2, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
+    graph_2, sink = algo.build_flow_graph(random_city.breweries, random_city.inns, random_city.fields, random_city.roads)
 
     #liczę max_flow z pola -> browary
     max_flow = graph_1.edmonds_karp(0, sink, 1)
@@ -51,9 +57,9 @@ def main():
     print(f"Maksymalny przepływ: {max_flow}, sink: {sink}")
 
     # Tworze graf dla pola -> browary, browary -> karczmy
-    graph_1, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
+    graph_1, sink = algo.build_flow_graph(random_city.fields, random_city.breweries, random_city.inns, random_city.roads)
 
-    graph_2, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
+    graph_2, sink = algo.build_flow_graph(random_city.breweries, random_city.inns, random_city.fields, random_city.roads)
 
 
     # Wywołuje funkcje szukającą
@@ -65,7 +71,11 @@ def main():
     print(f"Maksymalny przepływ: {max_flow}, minimalny koszt: {min_cost}, sink: {sink}")
 
 
-    plotter.plot_city(city, show_capacity=True)
+
+    end = time.time()
+    print(f"Czas wykonania: {end - start:.4f} sekund")
+
+    plotter.plot_city(random_city, show_capacity=False, max_flow=max_flow)
 
 if __name__ == "__main__":
     main()

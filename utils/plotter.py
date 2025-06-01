@@ -4,13 +4,14 @@ from models.city import City
 def plot_city(
     city: City,
     show_capacity=False,
-    show_sector_yield=True
+    show_sector_yield=True,
+    max_flow = 0
     ):
     # Staly rozmiar miasta 10 x 10
     plt.figure(figsize=(7, 7))
     plt.xlim(0, 10)
     plt.ylim(0, 10)
-    plt.title("Mapa miasta Shire")
+    plt.title(f"Mapa miasta Shire \n Maksymalny przesyl: {max_flow} \n")
 
     colors = ["gold", "purple", "blueviolet", "hotpink"]
 
