@@ -30,7 +30,7 @@ def main():
 
 
     # maks 3400 do kazdego po rowno tyle sie miesci na mapie 10 na 10 jezeli sa odddalone o 0.1
-    random_city = Generator(500,500,500,0).city
+    random_city = Generator(166,166,166,5).city
     random_city.assign_sector_yeild_to_fields()
 
     #Buduję graf pola -> browary

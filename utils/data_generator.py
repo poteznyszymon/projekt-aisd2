@@ -15,7 +15,7 @@ class Generator:
         number_of_fields,
         number_of_breweries,
         number_of_inns,
-        percentage_of_broken_roads
+        numbers_of_destroyed_roads
     ):
         self.city = City()
 
@@ -87,13 +87,11 @@ class Generator:
             edges.add(tuple(sorted((simplex[2], simplex[0]))))
 
         edges = list(edges)
-        num_broken_roads = int(len(edges) * (percentage_of_broken_roads / 100))
-        broken_indices = set(random.sample(range(len(edges)), num_broken_roads))
 
         # tworzenie drog
         for idx, (i, j) in enumerate(edges):
             p1 = points[i]
             p2 = points[j]
-            repair_cost = random.randint(10, 40) if idx in broken_indices else 0
+            repair_cost = random.randint(10, 40) if idx <= numbers_of_destroyed_roads else 0
             road = Road(idx, p1.tolist(), p2.tolist(), random.randint(40, 80), repair_cost)
             self.city.roads.append(road)
