@@ -1,8 +1,10 @@
+import json
 import os
 from models.city import City
 import utils.algo as algo
 import utils.plotter as plotter
 from utils.data_generator import Generator
+from utils.coding_encoding import huffman_code
 import time
 
 DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_6_2")
@@ -17,20 +19,8 @@ def main():
     city.load_sectors_from_json(os.path.join(DATA_DIR_PATH, "sectors.json"))
     city.assign_sector_yeild_to_fields()
 
-    for field in city.fields:
-        print(f"Field ID: {field.id}, X: {field.x}, Y: {field.y}, sector_yield: {field.sector_yield}")
-    for brewerie in city.breweries:
-        print(f"Brewerie ID: {brewerie.id}, X: {brewerie.x}, Y: {brewerie.y}, Capacity: {brewerie.capacity}")
-    for inn in city.inns:
-        print(f"Inn ID: {inn.id}, X: {inn.x}, Y: {inn.y}")
-    for road in city.roads:
-        print(f"Road ID: {road.id}, Start: {road.start}, End: {road.end}, Capacity: {road.capacity}, Repair Cost: {road.repair_cost}")
-    for sector in city.sectors:
-        print(f"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}")
-
-
     # maks 3400 do kazdego po rowno tyle sie miesci na mapie 10 na 10 jezeli sa odddalone o 0.1
-    random_city = Generator(500,500,500,0).city
+    random_city = Generator(2,2,2,1).city
     random_city.assign_sector_yeild_to_fields()
 
     #Buduję graf pola -> browary
@@ -61,21 +51,19 @@ def main():
 
     graph_2, sink = algo.build_flow_graph(random_city.breweries, random_city.inns, random_city.fields, random_city.roads)
 
-
     # Wywołuje funkcje szukającą
     min_cost = [float('inf')]
     repair_list = []
     min_cost, graph_1_1, graph_2_1 = algo.test(graph_1, graph_2, 0, sink,  max_flow, min_cost, repair_list, -1)
-    graph_1_1.print_graph()
-    graph_2_1.print_graph()
     print(f"Maksymalny przepływ: {max_flow}, minimalny koszt: {min_cost}, sink: {sink}")
-
-
 
     end = time.time()
     print(f"Czas wykonania: {end - start:.4f} sekund")
 
-    plotter.plot_city(random_city, show_capacity=False, max_flow=max_flow)
+    #plotter.plot_city(random_city, show_capacity=False, max_flow=max_flow, min_cost=min_cost)
+
+
+    huffman_code(random_city)
 
 if __name__ == "__main__":
     main()

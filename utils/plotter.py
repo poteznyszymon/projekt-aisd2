@@ -5,13 +5,14 @@ def plot_city(
     city: City,
     show_capacity=False,
     show_sector_yield=True,
-    max_flow = 0
+    max_flow = 0,
+    min_cost = 0
     ):
     # Staly rozmiar miasta 10 x 10
     plt.figure(figsize=(7, 7))
     plt.xlim(0, 10)
     plt.ylim(0, 10)
-    plt.title(f"Mapa miasta Shire \n Maksymalny przesyl: {max_flow} \n")
+    plt.title(f"Mapa miasta Shire \n Maksymalny przesyl: {max_flow} \n Minimalny koszt: {min_cost} \n")
 
     colors = ["gold", "purple", "blueviolet", "hotpink"]
 

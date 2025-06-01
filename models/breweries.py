@@ -4,3 +4,11 @@ class Breweries():
         self.x = x
         self.y = y
         self.capacity = capacity
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "x": self.x,
+            "y": self.y,
+            "capacity": self.capacity
+        }

@@ -8,3 +8,10 @@ class Sector():
         
     def to_point_list(self) -> list[Point]:
         return [Point(x,y) for x,y in self.polygon]
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "polygon": self.polygon,
+            "sector_yield": self.sector_yield
+        }

@@ -12,7 +12,7 @@ class Point:
 # Jezeli D < 0 to p3 lezy po prawej stronie wektora p1p2
 # Jezeli D = 0 to punkty p1, p2, p3 sa wspolliniowe
 def orientation(p1: Point, p2: Point, p3: Point) -> float:
-    return (p2.x - p1.x) * (p3.y - p1.y)  - (p3.x - p1.x) * (p2.y - p1.y)
+    return (p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y)
 
 
 # Funckja ktora sprawdza czy punkt nalezy do odcinka
@@ -20,10 +20,10 @@ def is_point_on_segment(p: Point, start: Point, end: Point) -> bool:
     # Jezeli p nie sa wspolliniowe z ab to napewno p nienalezy do odcinka ab
     if orientation(start, end, p) != 0: return False
     # Teraz skoro p jest wspolliniowe z ab musimy sprawdzic czy lezy pomiedzy startem a koncem punktu ab
-    min_x: int = min(start.x, end.x)
-    max_x: int = max(start.x, end.x)
-    min_y: int = min(start.y, end.y)
-    max_y: int = max(start.y, end.y)
+    min_x: float = min(start.x, end.x)
+    max_x: float = max(start.x, end.x)
+    min_y: float = min(start.y, end.y)
+    max_y: float = max(start.y, end.y)
     
     return (min_x <= p.x <= max_x) and (min_y <= p.y <= max_y)
 
@@ -52,9 +52,9 @@ def do_segments_intersects(p1: Point, p2: Point, p3: Point, p4: Point) -> bool:
 # krawedziami wielokatu:
 # jezeli liczba przeciec jest nieparzysta to p lezy wewnatrz wielokatu
 # jezeli liczba przeciec jest parzysta to p lezy na zewnatrz wielokatu
-def is_point_inside_polygon(p: Point, polygon: list[Point]) -> bool:
+def is_point_inside_polygon(point: Point, polygon: list[Point]) -> bool:
     # punkt "promien" z ktorym bedziemy sprawdzac ilosc przeciec
-    extreme_point = Point(math.inf, p.y)
+    extreme_point = Point(math.inf, point.y)
     n = len(polygon)
     count = 0
 
@@ -62,9 +62,9 @@ def is_point_inside_polygon(p: Point, polygon: list[Point]) -> bool:
         current_point = polygon[i]
         next_point = polygon[(i + 1) % n]
         
-        if (do_segments_intersects(p, extreme_point, current_point, next_point)):
-            if orientation(current_point, next_point, p) == 0:
-                return is_point_on_segment(p, current_point, next_point)
+        if (do_segments_intersects(point, extreme_point, current_point, next_point)):
+            if orientation(current_point, next_point, point) == 0:
+                return is_point_on_segment(point, current_point, next_point)
             count += 1
     
     return count % 2 != 0
