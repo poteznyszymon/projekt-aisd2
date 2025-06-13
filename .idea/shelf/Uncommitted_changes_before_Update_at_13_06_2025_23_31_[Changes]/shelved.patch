@@ -1,0 +1,240 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\r\nfrom models.city import City\r\nimport utils.algo as algo\r\nimport utils.plotter as plotter\r\n\r\nDATA_DIR_PATH = os.path.join(os.path.dirname(__file__), \"data/example_4_1\")\r\ndef main():\r\n    city = City()\r\n    city.load_fields_from_json(os.path.join(DATA_DIR_PATH, \"fields.json\"))\r\n    city.load_inns_from_json(os.path.join(DATA_DIR_PATH, \"inns.json\"))\r\n    city.load_breweries_from_json(os.path.join(DATA_DIR_PATH, \"breweries.json\"))\r\n    city.load_roads_from_json(os.path.join(DATA_DIR_PATH, \"roads.json\"))\r\n    city.load_sectors_from_json(os.path.join(DATA_DIR_PATH, \"sectors.json\"))\r\n    city.assign_sector_yeild_to_fields()\r\n\r\n    \"\"\"\r\n    for field in city.fields:\r\n        print(f\"Field ID: {field.id}, X: {field.x}, Y: {field.y}, sector_yield: {field.sector_yield}\")\r\n    for brewerie in city.breweries:\r\n        print(f\"Brewerie ID: {brewerie.id}, X: {brewerie.x}, Y: {brewerie.y}, Capacity: {brewerie.capacity}\")\r\n    for inn in city.inns:\r\n        print(f\"Inn ID: {inn.id}, X: {inn.x}, Y: {inn.y}\")\r\n    for road in city.roads:\r\n        print(f\"Road ID: {road.id}, Start: {road.start}, End: {road.end}, Capacity: {road.capacity}, Repair Cost: {road.repair_cost}\")\r\n    for sector in city.sectors:\r\n        print(f\"Sector ID: {sector.id}, Polygon: {sector.polygon}, Yield: {sector.sector_yield}\")\r\n    \"\"\"\r\n\r\n    #Buduję graf pola -> browary\r\n    graph, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)\r\n\r\n    #liczę max_flow z pola -> browary\r\n    max_flow_1 = graph.edmonds_karp(0, sink, 1)\r\n    print(f\"Maksymalny przepływ z pól do browarów: {max_flow_1}, sink: {sink}\")\r\n\r\n    # Buduję graf browary -> karczmy\r\n    graph, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)\r\n\r\n    # liczę max_flow z browary -> karczmy\r\n    max_flow_2 = graph.edmonds_karp(0, sink, 1)\r\n    print(f\"Maksymalny przepływ z browarów do karczm: {max_flow_2}, sink: {sink}\")\r\n\r\n    # liczę max_flow całego miasta\r\n    max_flow=min(max_flow_1, max_flow_2)\r\n    print(f\"Maksymalny przepływ: {max_flow}, sink: {sink}\")\r\n\r\n    # Tworze graf dla pola -> browary, browary -> karczmy\r\n    graph_1, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)\r\n\r\n    graph_2, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)\r\n    print(\"BXB: \", graph_1.breweries_dict)\r\n    print(\"BXB: \", graph_1.breweries_dict_rev)\r\n    print(\"BXB: \", graph_2.breweries_dict)\r\n    print(\"BXB: \", graph_2.breweries_dict_rev)\r\n\r\n\r\n    # Wywołuje funkcje szukającą\r\n    min_cost = [1000]\r\n    repair_list = []\r\n    min_cost, graph_1_1, graph_2_1 = algo.test(graph_1, graph_2, 0, sink, max_flow, 0, min_cost, repair_list, -1)\r\n\r\n    print(\"   XXXX   \")\r\n    print(\"   XXXX   \")\r\n    print(\"   XXXX   \")\r\n    graph_1_1.print_graph()\r\n    graph_2_1.print_graph()\r\n    print(f\"Maksymalny przepływ: {max_flow}, minimalny koszt: {min_cost}, sink: {sink}\")\r\n\r\n\r\n\r\n    plotter.plot_city(city.fields, city.breweries, city.inns, city.roads, city.sectors, show_capacity=True)\r\n\r\n\r\nif __name__ == \"__main__\":\r\n    main()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision 08c511e112c8168848a6bf7c966c5b8b05338fd7)
++++ b/main.py	(date 1747595984648)
+@@ -3,7 +3,7 @@
+ import utils.algo as algo
+ import utils.plotter as plotter
+ 
+-DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_4_1")
++DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_1")
+ def main():
+     city = City()
+     city.load_fields_from_json(os.path.join(DATA_DIR_PATH, "fields.json"))
+@@ -38,7 +38,6 @@
+ 
+     # liczę max_flow z browary -> karczmy
+     max_flow_2 = graph.edmonds_karp(0, sink, 1)
+-    print(f"Maksymalny przepływ z browarów do karczm: {max_flow_2}, sink: {sink}")
+ 
+     # liczę max_flow całego miasta
+     max_flow=min(max_flow_1, max_flow_2)
+@@ -48,20 +47,13 @@
+     graph_1, sink = algo.build_flow_graph(city.fields, city.breweries, city.inns, city.roads)
+ 
+     graph_2, sink = algo.build_flow_graph(city.breweries, city.inns, city.fields, city.roads)
+-    print("BXB: ", graph_1.breweries_dict)
+-    print("BXB: ", graph_1.breweries_dict_rev)
+-    print("BXB: ", graph_2.breweries_dict)
+-    print("BXB: ", graph_2.breweries_dict_rev)
+ 
+ 
+     # Wywołuje funkcje szukającą
+     min_cost = [1000]
+     repair_list = []
+-    min_cost, graph_1_1, graph_2_1 = algo.test(graph_1, graph_2, 0, sink, max_flow, 0, min_cost, repair_list, -1)
++    min_cost, graph_1_1, graph_2_1 = algo.test(graph_1, graph_2, 0, sink, max_flow, min_cost, repair_list, -1)
+ 
+-    print("   XXXX   ")
+-    print("   XXXX   ")
+-    print("   XXXX   ")
+     graph_1_1.print_graph()
+     graph_2_1.print_graph()
+     print(f"Maksymalny przepływ: {max_flow}, minimalny koszt: {min_cost}, sink: {sink}")
+Index: utils/algo.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from collections import deque\r\nimport copy\r\n\r\nclass Edge:\r\n    def __init__(self, to: int, capacity: int, cost: int):\r\n        self.to = to              # numer wierzcholka docelowego\r\n        self.capacity = capacity  # przepustowosc\r\n        self.flow = 0             # przepływ\r\n        self.cost = cost          # koszt naprawy drogi\r\n        self.rev = None           # wskaznik na krawedz odwrotna (do pozniejszego obliczania przeplywu)\r\n\r\nclass Graph:\r\n    def __init__(self):\r\n        self.graph = {}  # slownik: wierzcholek -> lista krawedzi\r\n        self.edges = []\r\n        self.paid_edges = []  # tu zapisujemy tylko płatne krawędzie\r\n        self.breweries_dict = {}\r\n        self.breweries_dict_rev = {}\r\n\r\n    def add_node(self, node):\r\n        if node not in self.graph:\r\n            self.graph[node] = []\r\n    \r\n    def add_edge(self, start, end, capacity, cost=0):\r\n        forward = Edge(end, capacity, cost)\r\n        backward = Edge(start, capacity, cost)  # krawedz odwrotna: 0 capacity i przeciwny koszt\r\n        forward.rev = backward\r\n        backward.rev = forward\r\n        self.graph[start].append(forward)\r\n        self.graph[end].append(backward)\r\n\r\n        self.edges.append(forward)\r\n        if cost > 0:\r\n            self.paid_edges.append(forward)\r\n\r\n    def edmonds_karp(self, source, sink, tryb):\r\n        max_flow = 0\r\n        while True:\r\n            # BFS do znalezienia najkrótszej ścieżki rozszerzającej\r\n            parent = {}\r\n            queue = deque([source])\r\n            parent[source] = None\r\n            found = False\r\n\r\n            while queue and not found:\r\n                u = queue.popleft()\r\n                for edge in self.graph.get(u, []):\r\n                    if tryb == 1:\r\n                        if edge.capacity > 0 and edge.cost>=0 and edge.to not in parent:\r\n                            parent[edge.to] = (u, edge)  # Zapisz węzeł rodzica i krawędź\r\n                            queue.append(edge.to)\r\n\r\n                            if edge.to == sink:\r\n                                found = True\r\n                                break\r\n                    else:\r\n                        if edge.capacity > 0 and edge.cost == 0 and edge.to not in parent:\r\n                            parent[edge.to] = (u, edge)  # Zapisz węzeł rodzica i krawędź\r\n                            queue.append(edge.to)\r\n\r\n                            if edge.to == sink:\r\n                                found = True\r\n                                break\r\n                #print(deque(parent))\r\n            #print(deque(parent))\r\n            if not found:\r\n                break\r\n\r\n            # Oblicz maksymalny przepływ na znalezionej ścieżce\r\n            path_flow = float('inf')\r\n            v = sink\r\n            while v != source:\r\n                u, edge = parent[v]\r\n                path_flow = min(path_flow, edge.capacity)\r\n                v = u\r\n                #print(f\"{u} -> {edge.to} => cost: {edge.cost}, capacity: {edge.capacity}, max flow: {path_flow}\")\r\n\r\n            # Aktualizuj przepływy\r\n            v = sink\r\n            while v != source:\r\n                u, edge = parent[v]\r\n                edge.capacity -= path_flow\r\n                edge.rev.capacity += path_flow\r\n                edge.flow += path_flow\r\n                edge.rev.flow -= path_flow\r\n                v = u\r\n\r\n            max_flow += path_flow\r\n        return max_flow\r\n        \r\n    def print_graph(self):\r\n        for node, edges in self.graph.items():\r\n            print(f\"Wierzcholek {node}:\")\r\n            visited_edges = set()  # Set do sledzenia odwiedzonych krawedzi\r\n            \r\n            for edge in edges:\r\n                # Sprawdzamy czy krawedz odwrotna zostala juz wydrukowana\r\n                #if (edge.to, edge.rev.to) not in visited_edges and (edge.rev.to, edge.to) not in visited_edges:\r\n                print(f\"  -> {edge.to} | capacity: {edge.capacity} | flow: {edge.flow} | cost: {edge.cost}\")\r\n                  #  visited_edges.add((node, edge.to))  # Dodajemy krawedz\r\n                    #visited_edges.add((edge.to, node))  # Dodajemy krawedz odwrotna\r\n            print()\r\n\r\ndef test(graph_1, graph_2, source, sink, max_flow, current_flow, min_cost, repair_list, napraw):\r\n    if napraw == -1:\r\n        print(f\"TEST 0\")\r\n        graph_1_copy = copy.deepcopy(graph_1)\r\n        graph_2_copy = copy.deepcopy(graph_2)\r\n        current_cost = 0\r\n        max_flow_1 = graph_1_copy.edmonds_karp(source, sink, 2)\r\n        \"\"\"print(\"Z Browarów do sink\")\r\n        for edge in graph_1_copy.graph[sink]:\r\n            # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka\r\n            if edge.rev:\r\n                print(f\"[Node_id: {edge.to}, ID_czegos: {graph_1_copy.breweries_dict[edge.to]}, {edge.rev.flow} / {edge.rev.capacity}]\")\"\"\"\r\n\r\n        # print(\"Z source do Browarów 1\")\r\n        for edge in graph_2_copy.graph[source]:\r\n            # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka\r\n\r\n            if edge.rev:\r\n                # print(f\"[Node_id: {edge.to}, ID_czegos: {graph_2_copy.breweries_dict[edge.to]}, {edge.flow} / {edge.capacity}]\")\r\n                # print(f\"   {graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]}\")\r\n                for edge_1 in graph_1_copy.graph[graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]]:\r\n                    if edge_1.to == sink:\r\n                        # print(f\"      edge {edge_1.to}, flow: {edge_1.flow} / {edge_1.rev.capacity}, EDGE: {edge.capacity}\")\r\n                        edge.capacity = -edge_1.rev.flow\r\n                        edge.rev.capacity = -edge_1.rev.flow\r\n\r\n        max_flow_2 = graph_2_copy.edmonds_karp(source, sink, 2)\r\n        current_flow = min(max_flow_1, max_flow_2)\r\n        print(f\"Koszt: {current_cost}, przepływ: {current_flow}, naprawiono: {0} / {len(graph_1_copy.paid_edges)}, {max_flow_1}, {max_flow_2}\")\r\n\r\n        if current_flow >= max_flow:\r\n            min_cost[0] = current_cost\r\n            print(f\"Nowy minimalny koszt znaleziony: {min_cost[0]}, dla napraw: 0\")\r\n            return min_cost[0], graph_1_copy, graph_2_copy\r\n        print(\"GRAF_1\")\r\n        graph_1_copy.print_graph()\r\n        print(\"GRAF_2\")\r\n        graph_2_copy.print_graph()\r\n\r\n    print(\"NOWA REKURENCJA\")\r\n    graph_1_copy = copy.deepcopy(graph_1)\r\n    graph_2_copy = copy.deepcopy(graph_2)\r\n\r\n    # W kolejnych rekurencjach kopiujemy listę napraw i modyfikujemy grafy\r\n    local_repair_list = repair_list.copy()\r\n\r\n    if napraw >= 0:\r\n        local_repair_list.append(napraw)\r\n\r\n    current_cost = 0\r\n    for i in local_repair_list:\r\n        print(f\"Repairing {i} za {graph_1_copy.paid_edges[i].cost}\")\r\n        current_cost += graph_1_copy.paid_edges[i].cost\r\n        graph_1_copy.paid_edges[i].cost = 0\r\n        graph_1_copy.paid_edges[i].rev.cost = 0\r\n        graph_2_copy.paid_edges[i].cost = 0\r\n        graph_2_copy.paid_edges[i].rev.cost = 0\r\n    print(f\"Current cost: {current_cost}\")\r\n\r\n    max_flow_1 = graph_1_copy.edmonds_karp(source, sink, 2)\r\n    \"\"\"print(\"Z Browarów do sink\")\r\n    for edge in graph_1_copy.graph[sink]:\r\n        # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka\r\n        if edge.rev:\r\n            print(f\"[Node_id: {edge.to}, ID_czegos: {graph_1_copy.breweries_dict[edge.to]}, {edge.rev.flow} / {edge.rev.capacity}]\")\"\"\"\r\n\r\n    #print(\"Z source do Browarów 1\")\r\n    for edge in graph_2_copy.graph[source]:\r\n        # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka\r\n        \r\n        if edge.rev:\r\n            #print(f\"[Node_id: {edge.to}, ID_czegos: {graph_2_copy.breweries_dict[edge.to]}, {edge.flow} / {edge.capacity}]\")\r\n            #print(f\"   {graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]}\")\r\n            for edge_1 in graph_1_copy.graph[graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]]:\r\n                if edge_1.to == sink:\r\n                    #print(f\"      edge {edge_1.to}, flow: {edge_1.flow} / {edge_1.rev.capacity}, EDGE: {edge.capacity}\")\r\n                    edge.capacity = -edge_1.rev.flow\r\n                    edge.rev.capacity = -edge_1.rev.flow\r\n\r\n    max_flow_2 = graph_2_copy.edmonds_karp(source, sink, 2)\r\n    \"\"\"print(\"Z source do Browarów 2\")\r\n    for edge in graph_2_copy.graph[source]:\r\n        # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka\r\n        if edge.rev:\r\n            print(f\"[Node_id: {edge.to}, ID_czegos: {graph_2_copy.breweries_dict[edge.to]}, {edge.flow} / {edge.capacity}]\")\r\n\r\n    print(\"Z karczm do sink\")\r\n    for edge in graph_2_copy.graph[sink]:\r\n        if edge.rev:\r\n            print(f\"[Node_id: {edge.to}, {edge.rev.flow} / {edge.rev.capacity}]\")\"\"\"\r\n\r\n    current_flow = min(max_flow_1, max_flow_2)\r\n    #print()\r\n    #print()\r\n    #print(\"GRAF_1\")\r\n    #graph_1_copy.print_graph()\r\n    #print(\"GRAF_2\")\r\n    #graph_2_copy.print_graph()\r\n\r\n    print(f\"Koszt: {current_cost}, przepływ: {current_flow}, naprawiono: {len(local_repair_list)} / {len(graph_1_copy.paid_edges)}, {max_flow_1}, {max_flow_2}\")\r\n    for i in local_repair_list:\r\n        print(f\"[{i}]\")\r\n\r\n    #print(f\"Browarów: {len(graph_1.breweries_dict)}\")\r\n    #print(graph_1_copy.breweries_dict)\r\n\r\n    # Sprawdzenie czy osiągnięto wymagany przepływ\r\n    if current_flow >= max_flow:\r\n        if current_cost < min_cost[0]:\r\n            min_cost[0] = current_cost\r\n            print(f\"Nowy minimalny koszt znaleziony: {min_cost[0]}, dla napraw: {local_repair_list}\")\r\n        return min_cost[0], graph_1_copy, graph_2_copy\r\n\r\n    # Próba naprawienia kolejnych krawędzi\r\n    if len(local_repair_list) < len(graph_1_copy.paid_edges):\r\n        start = max(local_repair_list, default=-1) + 1\r\n        for i in range(start, len(graph_1_copy.paid_edges)):\r\n            if graph_1_copy.paid_edges[i].cost > 0:\r\n                test(\r\n                    graph_1,\r\n                    graph_2,\r\n                    source,\r\n                    sink,\r\n                    max_flow,\r\n                    current_flow,\r\n                    min_cost,\r\n                    local_repair_list,\r\n                    i\r\n                )\r\n\r\n    return min_cost[0], graph_1_copy, graph_2_copy\r\n\r\n\r\ndef build_flow_graph(sources, targets, others, roads):\r\n    graph = Graph()\r\n\r\n    node_id = 0\r\n    point_to_node = {}\r\n\r\n    # 1. Dodajemy source (sztuczny poczatkowy wierzcholek dla sieci przeplywowej)\r\n    graph.add_node(node_id)\r\n    node_id += 1\r\n\r\n    # 2. Pola / Browary\r\n    for source in sources:\r\n        if hasattr(source, 'capacity'):\r\n            graph.breweries_dict[node_id] = source.id\r\n            graph.breweries_dict_rev[source.id] = node_id\r\n        point = (source.x, source.y)\r\n        point_to_node[point] = node_id\r\n        graph.add_node(node_id)\r\n        node_id += 1\r\n\r\n    # 3. Browary / Karczmy\r\n    for target in targets:\r\n        if hasattr(target, 'capacity'):\r\n            graph.breweries_dict[node_id] = target.id\r\n            graph.breweries_dict_rev[target.id] = node_id\r\n        point = (target.x, target.y)\r\n        point_to_node[point] = node_id\r\n        graph.add_node(node_id)\r\n        node_id += 1\r\n\r\n    # 4. Karczmy / Pola\r\n    for other in others:\r\n        point = (other.x, other.y)\r\n        point_to_node[point] = node_id\r\n        graph.add_node(node_id)\r\n        node_id += 1\r\n\r\n    # 5. Dodajemy sink (sztuczny ostatni wierzcholek dla sieci przeplywowej)\r\n    sink = node_id\r\n    graph.add_node(sink)\r\n\r\n    # 6. Krawedzie Source -> Pola / Browary\r\n    for source in sources:\r\n        if hasattr(source, 'sector_yield'):\r\n            capacity = source.sector_yield\r\n        else:\r\n            capacity = source.capacity\r\n        source_node = point_to_node[(source.x, source.y)]\r\n        graph.add_edge(0, source_node, capacity, cost=0)\r\n\r\n    # 7. Krawędzie na podstawie dróg (między polami, browarami, karczmami)\r\n    repair_list = []\r\n    for road in roads:\r\n        from_point = tuple(road.start)\r\n        to_point = tuple(road.end)\r\n\r\n        if from_point in point_to_node and to_point in point_to_node:\r\n            from_node = point_to_node[from_point]\r\n            to_node = point_to_node[to_point]\r\n\r\n            graph.add_edge(from_node, to_node, road.capacity, cost=road.repair_cost)\r\n            # Dodajemy tez w druga strone bo drogi sa dwukierunkowe\r\n            #graph.add_edge(to_node, from_node, road.capacity, cost=road.repair_cost)\r\n\r\n    # 8. Krawedzie Browary -> Sink\r\n    for target in targets:\r\n        target_node = point_to_node[(target.x, target.y)]\r\n        graph.add_edge(target_node, sink, float('inf'), cost=0)\r\n\r\n\r\n    return graph, sink
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/utils/algo.py b/utils/algo.py
+--- a/utils/algo.py	(revision 08c511e112c8168848a6bf7c966c5b8b05338fd7)
++++ b/utils/algo.py	(date 1747596383852)
+@@ -12,10 +12,9 @@
+ class Graph:
+     def __init__(self):
+         self.graph = {}  # slownik: wierzcholek -> lista krawedzi
+-        self.edges = []
+-        self.paid_edges = []  # tu zapisujemy tylko płatne krawędzie
+-        self.breweries_dict = {}
+-        self.breweries_dict_rev = {}
++        self.paid_edges = []            # tu zapisujemy tylko płatne krawędzie
++        self.breweries_dict = {}        # słownik: node_id -> brewerie_id
++        self.breweries_dict_rev = {}    # słownik: brewerie_idd -> node_i
+ 
+     def add_node(self, node):
+         if node not in self.graph:
+@@ -29,7 +28,6 @@
+         self.graph[start].append(forward)
+         self.graph[end].append(backward)
+ 
+-        self.edges.append(forward)
+         if cost > 0:
+             self.paid_edges.append(forward)
+ 
+@@ -101,135 +99,73 @@
+                     #visited_edges.add((edge.to, node))  # Dodajemy krawedz odwrotna
+             print()
+ 
+-def test(graph_1, graph_2, source, sink, max_flow, current_flow, min_cost, repair_list, napraw):
++def test(graph_1, graph_2, source, sink, max_flow, min_cost, repair_list, napraw):
+     if napraw == -1:
+-        print(f"TEST 0")
+-        graph_1_copy = copy.deepcopy(graph_1)
+-        graph_2_copy = copy.deepcopy(graph_2)
++        graph_1_copy = copy.deepcopy(graph_1) # skopiowanie pustego grafu: pola -> browary
++        graph_2_copy = copy.deepcopy(graph_2) # skopiowanie pustego grafu: browary -> karczmy
+         current_cost = 0
+-        max_flow_1 = graph_1_copy.edmonds_karp(source, sink, 2)
+-        """print("Z Browarów do sink")
+-        for edge in graph_1_copy.graph[sink]:
+-            # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
+-            if edge.rev:
+-                print(f"[Node_id: {edge.to}, ID_czegos: {graph_1_copy.breweries_dict[edge.to]}, {edge.rev.flow} / {edge.rev.capacity}]")"""
+ 
+-        # print("Z source do Browarów 1")
++        max_flow_1 = graph_1_copy.edmonds_karp(source, sink, 2) # policzenie maksymalnego przepływu dla grafu: pola -> browary
++
++        # znalezienie krawędzi z Source do Browarów w grafie: Browary -> Karczmy
+         for edge in graph_2_copy.graph[source]:
+-            # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
+-
+-            if edge.rev:
+-                # print(f"[Node_id: {edge.to}, ID_czegos: {graph_2_copy.breweries_dict[edge.to]}, {edge.flow} / {edge.capacity}]")
+-                # print(f"   {graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]}")
+-                for edge_1 in graph_1_copy.graph[graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]]:
+-                    if edge_1.to == sink:
+-                        # print(f"      edge {edge_1.to}, flow: {edge_1.flow} / {edge_1.rev.capacity}, EDGE: {edge.capacity}")
+-                        edge.capacity = -edge_1.rev.flow
+-                        edge.rev.capacity = -edge_1.rev.flow
++            # znalezienie krawędzi wychodzących z browarów w grafie: Pola -> Browary
++            for edge_1 in graph_1_copy.graph[graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]]:
++                # znalezienie ktrawędzi prowadzących do sink
++                if edge_1.to == sink:
++                    edge.capacity = -edge_1.rev.flow        # przypisanie krawędziom z sourse do browarów w grafie: Browary -> Karczmy, odpowiadający im
++                    edge.rev.capacity = -edge_1.rev.flow    # przepływ z browarów do sink w grafie: Pola -> Browary
+ 
+-        max_flow_2 = graph_2_copy.edmonds_karp(source, sink, 2)
+-        current_flow = min(max_flow_1, max_flow_2)
+-        print(f"Koszt: {current_cost}, przepływ: {current_flow}, naprawiono: {0} / {len(graph_1_copy.paid_edges)}, {max_flow_1}, {max_flow_2}")
++        max_flow_2 = graph_2_copy.edmonds_karp(source, sink, 2) # policzenie maksymalnego przepływu dla grafu: Browary -> Karczmy
++        current_flow = min(max_flow_1, max_flow_2)  # policzenie maksymalnego przepływu całego sieci: Pola -> Karczmy -> Karczmy
+ 
+-        if current_flow >= max_flow:
++        if current_flow >= max_flow: # sprawdzenie czy zerowy koszt jest rozwiązaniem tej sieci
+             min_cost[0] = current_cost
+-            print(f"Nowy minimalny koszt znaleziony: {min_cost[0]}, dla napraw: 0")
+             return min_cost[0], graph_1_copy, graph_2_copy
+-        print("GRAF_1")
+-        graph_1_copy.print_graph()
+-        print("GRAF_2")
+-        graph_2_copy.print_graph()
+ 
+-    print("NOWA REKURENCJA")
++    # Rozpoczęcie sprawdzania rekurencyjnego
+     graph_1_copy = copy.deepcopy(graph_1)
+     graph_2_copy = copy.deepcopy(graph_2)
+ 
+-    # W kolejnych rekurencjach kopiujemy listę napraw i modyfikujemy grafy
++    # skopiowanie listy naprawionych krawędzi
+     local_repair_list = repair_list.copy()
+ 
+     if napraw >= 0:
+-        local_repair_list.append(napraw)
++        local_repair_list.append(napraw)    # dodanie aktualnie naprawianej krawędzi
+ 
+     current_cost = 0
+-    for i in local_repair_list:
+-        print(f"Repairing {i} za {graph_1_copy.paid_edges[i].cost}")
++    for i in local_repair_list: # podlicznie aktualnych kosztów grafu
+         current_cost += graph_1_copy.paid_edges[i].cost
+         graph_1_copy.paid_edges[i].cost = 0
+         graph_1_copy.paid_edges[i].rev.cost = 0
+         graph_2_copy.paid_edges[i].cost = 0
+         graph_2_copy.paid_edges[i].rev.cost = 0
+-    print(f"Current cost: {current_cost}")
++
++    if current_cost > min_cost: # zakończenie szukania, gdy aktualny koszt przekroczył wartość aktualnie znalezionego minimalnego kosztu
++        return current_cost, graph_1_copy, graph_2_copy
+ 
+     max_flow_1 = graph_1_copy.edmonds_karp(source, sink, 2)
+-    """print("Z Browarów do sink")
+-    for edge in graph_1_copy.graph[sink]:
+-        # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
+-        if edge.rev:
+-            print(f"[Node_id: {edge.to}, ID_czegos: {graph_1_copy.breweries_dict[edge.to]}, {edge.rev.flow} / {edge.rev.capacity}]")"""
+ 
+-    #print("Z source do Browarów 1")
+     for edge in graph_2_copy.graph[source]:
+-        # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
+-        
+         if edge.rev:
+-            #print(f"[Node_id: {edge.to}, ID_czegos: {graph_2_copy.breweries_dict[edge.to]}, {edge.flow} / {edge.capacity}]")
+-            #print(f"   {graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]}")
+             for edge_1 in graph_1_copy.graph[graph_1_copy.breweries_dict_rev[graph_2_copy.breweries_dict[edge.to]]]:
+                 if edge_1.to == sink:
+-                    #print(f"      edge {edge_1.to}, flow: {edge_1.flow} / {edge_1.rev.capacity}, EDGE: {edge.capacity}")
+                     edge.capacity = -edge_1.rev.flow
+                     edge.rev.capacity = -edge_1.rev.flow
+ 
+     max_flow_2 = graph_2_copy.edmonds_karp(source, sink, 2)
+-    """print("Z source do Browarów 2")
+-    for edge in graph_2_copy.graph[source]:
+-        # Sprawdź krawędzie odwrotne, czyli takie, które prowadzą *do* sinka
+-        if edge.rev:
+-            print(f"[Node_id: {edge.to}, ID_czegos: {graph_2_copy.breweries_dict[edge.to]}, {edge.flow} / {edge.capacity}]")
+-
+-    print("Z karczm do sink")
+-    for edge in graph_2_copy.graph[sink]:
+-        if edge.rev:
+-            print(f"[Node_id: {edge.to}, {edge.rev.flow} / {edge.rev.capacity}]")"""
+-
+     current_flow = min(max_flow_1, max_flow_2)
+-    #print()
+-    #print()
+-    #print("GRAF_1")
+-    #graph_1_copy.print_graph()
+-    #print("GRAF_2")
+-    #graph_2_copy.print_graph()
+-
+-    print(f"Koszt: {current_cost}, przepływ: {current_flow}, naprawiono: {len(local_repair_list)} / {len(graph_1_copy.paid_edges)}, {max_flow_1}, {max_flow_2}")
+-    for i in local_repair_list:
+-        print(f"[{i}]")
+ 
+-    #print(f"Browarów: {len(graph_1.breweries_dict)}")
+-    #print(graph_1_copy.breweries_dict)
+-
+-    # Sprawdzenie czy osiągnięto wymagany przepływ
+     if current_flow >= max_flow:
+         if current_cost < min_cost[0]:
+             min_cost[0] = current_cost
+-            print(f"Nowy minimalny koszt znaleziony: {min_cost[0]}, dla napraw: {local_repair_list}")
+         return min_cost[0], graph_1_copy, graph_2_copy
+ 
+-    # Próba naprawienia kolejnych krawędzi
+     if len(local_repair_list) < len(graph_1_copy.paid_edges):
+         start = max(local_repair_list, default=-1) + 1
+         for i in range(start, len(graph_1_copy.paid_edges)):
+             if graph_1_copy.paid_edges[i].cost > 0:
+-                test(
+-                    graph_1,
+-                    graph_2,
+-                    source,
+-                    sink,
+-                    max_flow,
+-                    current_flow,
+-                    min_cost,
+-                    local_repair_list,
+-                    i
+-                )
++                test(graph_1, graph_2, source, sink, max_flow, min_cost, local_repair_list, i)
+ 
+     return min_cost[0], graph_1_copy, graph_2_copy
+ 
