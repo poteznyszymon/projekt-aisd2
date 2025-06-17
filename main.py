@@ -63,10 +63,13 @@ def main():
 
     #plotter.plot_city(random_city, show_capacity=False, max_flow=max_flow, min_cost=min_cost)
 
-
-    encoded, codes = huffman_code(random_city)
+    encoded, codes = huffman_code(random_city, max_flow, min_cost)
     decoded_text = decode_huffman(encoded, codes)
-    print(decoded_text)
+
+    decoded_data = json.loads(decoded_text)
+
+    print(decoded_data)
+
 
 if __name__ == "__main__":
     main()

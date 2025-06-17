@@ -15,13 +15,15 @@ class Node:
         return self.frequency < other.frequency
 
 
-def huffman_code(city: City):
+def huffman_code(city: City, max_flow: int, min_cost: int):
     data = {
         "fields": [item.to_dict() for item in city.fields],
         "breweries": [item.to_dict() for item in city.breweries],
         "inns": [item.to_dict() for item in city.inns],
         "roads": [item.to_dict() for item in city.roads],
-        "shire_sectors": [item.to_dict() for item in city.sectors]
+        "shire_sectors": [item.to_dict() for item in city.sectors],
+        "max_flow": max_flow,
+        "min_cost": min_cost
     }
 
     frequency_data = {}
@@ -33,8 +35,10 @@ def huffman_code(city: City):
         else:
             frequency_data[char] = 1
 
+    '''
     for char in frequency_data:
         print(f"'{char}': {frequency_data[char]}")
+    '''
 
     heap = []
     for char, frequency in frequency_data.items():
@@ -64,7 +68,6 @@ def huffman_code(city: City):
         generate_codes(node.right, current_code + "1")
 
     generate_codes(tree_root, "")
-    print(codes)
 
     encoded = ""
     for char in json_text:
@@ -80,6 +83,7 @@ def huffman_code(city: City):
         file.write(json.dumps(codes))
 
     return encoded, codes
+
 
 def decode_huffman(encoded: str, codes: dict) -> str:
     reversed_codes = {code: char for char, code in codes.items()}
