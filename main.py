@@ -5,6 +5,7 @@ import utils.algo as algo
 import utils.plotter as plotter
 from utils.data_generator import Generator
 from utils.coding_encoding import huffman_code
+from utils.coding_encoding import decode_huffman
 import time
 
 DATA_DIR_PATH = os.path.join(os.path.dirname(__file__), "data/example_6_2")
@@ -63,7 +64,9 @@ def main():
     #plotter.plot_city(random_city, show_capacity=False, max_flow=max_flow, min_cost=min_cost)
 
 
-    huffman_code(random_city)
+    encoded, codes = huffman_code(random_city)
+    decoded_text = decode_huffman(encoded, codes)
+    print(decoded_text)
 
 if __name__ == "__main__":
     main()

@@ -70,7 +70,7 @@ def huffman_code(city: City):
     for char in json_text:
         encoded += codes[char]
 
-    print(f"\nZakodowany tekst (fragment): {encoded}")
+    print(f"\nZakodowany tekst: {encoded}")
     print(f"Dlugosc zakodowanego: {len(encoded)} bitów")
 
     with open("./output/encoded_output.txt", "w") as file:
@@ -78,4 +78,20 @@ def huffman_code(city: City):
 
     with open("./output/huffman_codes.txt", "w") as file:
         file.write(json.dumps(codes))
+
+    return encoded, codes
+
+def decode_huffman(encoded: str, codes: dict) -> str:
+    reversed_codes = {code: char for char, code in codes.items()}
+
+    decoded_text = ""
+    current_code = ""
+
+    for bit in encoded:
+        current_code += bit
+        if current_code in reversed_codes:
+            decoded_text += reversed_codes[current_code]
+            current_code = ""
+
+    return decoded_text
 
