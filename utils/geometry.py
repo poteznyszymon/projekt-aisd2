@@ -54,7 +54,7 @@ def do_segments_intersects(p1: Point, p2: Point, p3: Point, p4: Point) -> bool:
 # jezeli liczba przeciec jest parzysta to p lezy na zewnatrz wielokatu
 def is_point_inside_polygon(point: Point, polygon: list[Point]) -> bool:
     # punkt "promien" z ktorym bedziemy sprawdzac ilosc przeciec
-    extreme_point = Point(math.inf, point.y)
+    extreme_point = Point(1e9, point.y)
     n = len(polygon)
     count = 0
 

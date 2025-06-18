@@ -21,7 +21,7 @@ def main():
     city.assign_sector_yeild_to_fields()
 
     # maks 3400 do kazdego po rowno tyle sie miesci na mapie 10 na 10 jezeli sa odddalone o 0.1
-    random_city = Generator(2,2,2,1).city
+    random_city = Generator(5,3,3,5).city
     random_city.assign_sector_yeild_to_fields()
 
     #Buduję graf pola -> browary
@@ -58,17 +58,18 @@ def main():
     min_cost, graph_1_1, graph_2_1 = algo.test(graph_1, graph_2, 0, sink,  max_flow, min_cost, repair_list, -1)
     print(f"Maksymalny przepływ: {max_flow}, minimalny koszt: {min_cost}, sink: {sink}")
 
-    end = time.time()
-    print(f"Czas wykonania: {end - start:.4f} sekund")
-
-    #plotter.plot_city(random_city, show_capacity=False, max_flow=max_flow, min_cost=min_cost)
-
     encoded, codes = huffman_code(random_city, max_flow, min_cost)
     decoded_text = decode_huffman(encoded, codes)
 
     decoded_data = json.loads(decoded_text)
 
     print(decoded_data)
+
+    end = time.time()
+    print(f"Czas wykonania: {end - start:.4f} sekund")
+
+    plotter.plot_city(random_city, show_capacity=False, max_flow=max_flow, min_cost=min_cost)
+
 
 
 if __name__ == "__main__":

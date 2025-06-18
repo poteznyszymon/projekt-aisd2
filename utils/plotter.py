@@ -18,6 +18,10 @@ def plot_city(
 
     for index, sector in enumerate(city.sectors):
         polygon = sector.polygon
+
+        if not polygon or len(polygon) < 3:
+            continue
+
         closed_polygon = polygon + [polygon[0]]
         x_cords = [point[0] for point in closed_polygon]
         y_cords = [point[1] for point in closed_polygon]
