@@ -6,7 +6,8 @@ from models.sector import Sector
 from models.road import Road
 import random
 import numpy as np
-from scipy.spatial import Delaunay
+from utils.delaunay import bowyer_watson
+from utils.delaunay import Triangle
 
 
 class Generator:
@@ -64,7 +65,7 @@ class Generator:
             sector = Sector(i, data[i], random.randint(80, 180))
             self.city.sectors.append(sector)
 
-        # przygotowanie punktow do triangulacji
+        # punkty do triangulacji
         all_points = []
         all_points.extend([[f.x, f.y] for f in self.city.fields])
         all_points.extend([[b.x, b.y] for b in self.city.breweries])
@@ -77,20 +78,18 @@ class Generator:
             # Do triangulacji potrzebne sa co najmniej 3 punkty
             return
 
-        # tworzenie triangulacji delaunaya
-        tri = Delaunay(points)
+        triangles: list[Triangle] = bowyer_watson(all_points)
         edges = set()
-        for simplex in tri.simplices:
-            edges.add(tuple(sorted((simplex[0], simplex[1]))))
-            edges.add(tuple(sorted((simplex[1], simplex[2]))))
-            edges.add(tuple(sorted((simplex[2], simplex[0]))))
+        for triangle in triangles:
+            verts = triangle.vertices
+            for i in range(3):
+                a, b = verts[i], verts[(i + 1) % 3]
+                edge = tuple(sorted([(a.x, a.y), (b.x, b.y)]))
+                edges.add(edge)
 
         edges = list(edges)
 
-        # tworzenie drog
-        for idx, (i, j) in enumerate(edges):
-            p1 = points[i]
-            p2 = points[j]
-            repair_cost = random.randint(20, 40) if idx <= numbers_of_destroyed_roads else 0
-            road = Road(idx, p1.tolist(), p2.tolist(), random.randint(40, 80), repair_cost)
+        for idx, (p1, p2) in enumerate(edges):
+            repair_cost = random.randint(20, 40) if idx < numbers_of_destroyed_roads else 0
+            road = Road(idx, list(p1), list(p2), random.randint(40, 80), repair_cost)
             self.city.roads.append(road)

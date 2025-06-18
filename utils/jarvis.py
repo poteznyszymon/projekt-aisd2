@@ -17,9 +17,6 @@ def convert_to_jarvis_points(points) -> list[list[float]]:
     bottom_point: Point = min(input_points, key=lambda p: (p.y, p.x))
     upper_point: Point = max(input_points, key=lambda p: (p.y, p.x))
 
-    print(bottom_point.x, bottom_point.y)
-    print(upper_point.x, upper_point.y)
-
     current_point = bottom_point
     while True:
         next_point = input_points[0]
