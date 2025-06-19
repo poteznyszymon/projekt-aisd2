@@ -64,4 +64,5 @@ def bowyer_watson(points: list[list[float]]):
             continue
         final_triangulation.append(triangle)
 
+    # Zwarcamy liste trojkatow ktore sa drogami w miescie
     return final_triangulation
