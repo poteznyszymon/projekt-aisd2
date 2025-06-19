@@ -1,0 +1,10 @@
+{
+    "breweries" : [
+        {"id": 1, "x": 3, "y": 5, "capacity": 200},
+        {"id": 2, "x": 3, "y": 1, "capacity": 50},
+        {"id": 3, "x": 5, "y": 9, "capacity": 100},
+        {"id": 4, "x": 7, "y": 9, "capacity": 150},
+        {"id": 5, "x": 7, "y": 7, "capacity": 200},
+        {"id": 6, "x": 3, "y": 9, "capacity": 100}
+    ]
+}
