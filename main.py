@@ -71,7 +71,6 @@ def main():
     plotter.plot_city(random_city, show_capacity=False, max_flow=max_flow, min_cost=min_cost)
 
 
-
 if __name__ == "__main__":
     main()
 
