@@ -1,0 +1,11 @@
+{
+    "fields": [
+        {"id": 1, "x": 1, "y": 3, "sector_yield": 150},
+        {"id": 2, "x": 1, "y": 5, "sector_yield": 100},
+        {"id": 3, "x": 1, "y": 7, "sector_yield": 100},
+        {"id": 4, "x": 5, "y": 7, "sector_yield": 100},
+        {"id": 5, "x": 5, "y": 3, "sector_yield": 100},
+        {"id": 6, "x": 7, "y": 5, "sector_yield": 100},
+        {"id": 7, "x": 1, "y": 9, "sector_yield": 150}
+    ]
+}

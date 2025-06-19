@@ -17,3 +17,7 @@ example 4_1
 example 5
     przepływ:   200
     koszt:      0
+
+example 7
+    przepływ:   800
+    koszt:      51
