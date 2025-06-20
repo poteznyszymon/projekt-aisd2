@@ -1,18 +1,11 @@
-import json
-import time
 import os
 import math
+import pytest
 from models.city import City
 from utils.algo import GraphEK
 from itertools import combinations
-import utils.plotter as plotter
-from utils.data_generator import Generator
-from utils.coding_encoding import huffman_code
-from utils.coding_encoding import decode_huffman
 
-def main():
-    start = time.time()
-    DATA_DIR = os.path.join(os.path.dirname(__file__), "data/example_6_2")
+def run_flow_solver(DATA_DIR):
     city = City()
     city.load_fields_from_json(os.path.join(DATA_DIR, 'fields.json'))
     city.load_breweries_from_json(os.path.join(DATA_DIR, 'breweries.json'))
@@ -93,21 +86,30 @@ def main():
         if best_flow == total_supply:
             break
 
-    print(f"Najlepszy przepływ: {best_flow}, koszt: {best_cost}")
-
-    encoded, codes = huffman_code(city, best_flow, best_cost)
-    decoded_text = decode_huffman(encoded, codes)
-
-    decoded_data = json.loads(decoded_text)
-
-    print(decoded_data)
-
-    end = time.time()
-    print(f"Czas wykonania: {end - start:.4f} sekund")
-
-    plotter.plot_city(city, show_capacity=True, max_flow=best_flow, min_cost=best_cost)
+    return best_flow, best_cost
 
 
-if __name__ == "__main__":
-    main()
+@pytest.mark.parametrize("example_num, expected_flow, expected_cost", [
+    (1, 320, 0),
+    (2, 70, 0),
+    (3, 70, 0),
+    (4, 450, 300),
+    ("4_1", 300, 0),
+    (5, 200, 0),
+    (6, 150, 14),
+    ("6_1", 150, 1),
+    ("6_2", 200, 23),
+    (7, 800, 51),
+])
+def test_flow_solver(example_num, expected_flow, expected_cost):
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+    data_dir = os.path.join(base_dir, 'data', f'example_{example_num}')
 
+    print(f"Testing example_{example_num} -> data_dir: {data_dir}")
+
+    assert os.path.exists(data_dir), f"Brak katalogu danych: {data_dir}"
+    assert os.path.exists(os.path.join(data_dir, 'fields.json')), "Brak pliku fields.json"
+
+    flow, cost = run_flow_solver(data_dir)
+    assert flow == expected_flow, f"Flow mismatch in example {example_num}"
+    assert cost == expected_cost, f"Cost mismatch in example {example_num}"

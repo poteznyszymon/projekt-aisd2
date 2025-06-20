@@ -1,22 +1,38 @@
-example 2 
+example 1
+    przepływ:   320
+    koszt:      0
+
+example 2
     przepływ:   70
     koszt:      0
 
-example 3 
+example 3
     przepływ:   70
     koszt:      0
 
-example 4 
+example 4
     przepływ:   450
-    koszt:      0
+    koszt:      300
 
-example 4_1 
+example 4_1
     przepływ:   300
     koszt:      0
 
 example 5
     przepływ:   200
     koszt:      0
+
+example 6
+    przepływ:   150
+    koszt:      14
+
+example 6_1
+    przepływ:   150
+    koszt:      1
+
+example 6_2
+    przepływ:   200
+    koszt:      23
 
 example 7
     przepływ:   800

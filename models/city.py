@@ -43,5 +43,5 @@ class City():
         for field in self.fields:
             for sector in self.sectors:
                 if is_point_inside_polygon(field.to_point(), sector.to_point_list()):
-                    field.sector_yield += sector.sector_yield
+                    field.sector_yield = sector.sector_yield
                     break
