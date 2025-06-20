@@ -5,8 +5,7 @@ class Field():
         self.id = id
         self.x = x
         self.y = y
-        # 20 bazowo plus premia zalezna od tego w jakiej cwiartce jest
-        self.sector_yield = 20
+        self.sector_yield = 0
     
     def to_point(self):
         return Point(self.x, self.y)
