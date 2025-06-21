@@ -5,15 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82a1baef-b765-4f28-94ba-8364e4bea321" name="Changes" comment="Dodanie algorytmu liczącego minimalny koszt i dodanie przykładów 6 i 6_1">
-      <change afterPath="$PROJECT_DIR$/tests/performance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_06_2025_23_31__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_06_2025_23_31__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/unit_tests.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/wyniki.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/wyniki.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/city.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/city.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/field.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/field.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output/encoded_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output/encoded_output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output/huffman_codes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output/huffman_codes.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/jarvis.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/jarvis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/performance.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/performance_tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/algo.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/algo.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +63,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Projekt_AiSD/projekt-aisd2&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
@@ -74,6 +73,9 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Projekt_AiSD\projekt-aisd2\data" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\szymo\OneDrive\Pulpit\projekt\tests" />
     </key>
   </component>
   <component name="RunManager">
@@ -141,6 +143,20 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests in performance_tests.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="projekt" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/performance_tests.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="tests" factoryName="Autodetect">
       <module name="projekt-aisd2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -173,6 +189,11 @@
       <option name="USE_PATTERN" value="false" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Python tests in performance_tests.py" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
