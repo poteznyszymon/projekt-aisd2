@@ -41,7 +41,8 @@ def plot_city(
     for road in city.roads:
         start_x, start_y = road.start
         end_x, end_y = road.end
-        plt.plot([start_x, end_x], [start_y, end_y], color="slategray", linestyle='-', linewidth=2)
+        plt.plot([start_x, end_x], [start_y, end_y], color = 'red' if road.repair_cost > 0 else 'slategray'
+, linestyle='-', linewidth=2)
         if show_capacity:
             plt.text((start_x + end_x )/ 2, (start_y + end_y) / 2, f"{road.capacity}; {road.repair_cost}",
                             ha='center', va='center',

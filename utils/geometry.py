@@ -66,5 +66,5 @@ def is_point_inside_polygon(point: Point, polygon: list[Point]) -> bool:
             if orientation(current_point, next_point, point) == 0:
                 return is_point_on_segment(point, current_point, next_point)
             count += 1
-    
+            
     return count % 2 != 0

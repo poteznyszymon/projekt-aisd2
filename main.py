@@ -12,7 +12,7 @@ from utils.coding_encoding import decode_huffman
 
 def main():
     start = time.time()
-    DATA_DIR = os.path.join(os.path.dirname(__file__), "data/example_6_2")
+    DATA_DIR = os.path.join(os.path.dirname(__file__), "data/example_7")
     city = City()
     city.load_fields_from_json(os.path.join(DATA_DIR, 'fields.json'))
     city.load_breweries_from_json(os.path.join(DATA_DIR, 'breweries.json'))
@@ -21,9 +21,12 @@ def main():
     city.load_sectors_from_json(os.path.join(DATA_DIR, 'sectors.json'))
     city.assign_sector_yeild_to_fields()
 
-    city = Generator(6,3,4,8).city
+    
+    '''
+    city = Generator(8,5,6,5).city
     city.assign_sector_yeild_to_fields()
-
+    '''
+    
     # Tworzenie listy węzłów (pola, browary, karczmy)
     physical = []
     for f in city.fields:
