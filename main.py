@@ -111,7 +111,7 @@ def main():
     end = time.time()
     print(f"Czas wykonania: {end - start:.4f} sekund")
 
-    plotter.plot_city(city, show_capacity=False, max_flow=best_flow, min_cost=best_cost)
+    plotter.plot_city(city, show_capacity=False, max_flow=best_flow, min_cost=best_cost, repaired = best_subset)
 
 
 if __name__ == "__main__":

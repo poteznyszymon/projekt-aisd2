@@ -6,7 +6,8 @@ def plot_city(
     show_capacity=False,
     show_sector_yield=True,
     max_flow = 0,
-    min_cost = 0
+    min_cost = 0,
+    repaired = 0
     ):
     # Staly rozmiar miasta 10 x 10
     plt.figure(figsize=(7, 7))
@@ -36,13 +37,21 @@ def plot_city(
                         ha='center', va='center',
                         fontsize=8, weight='bold',
                         color='darkred',
+                        zorder = 5,
                         bbox=dict(facecolor='white', alpha=0.7, edgecolor='none'))
 
     for road in city.roads:
         start_x, start_y = road.start
         end_x, end_y = road.end
-        plt.plot([start_x, end_x], [start_y, end_y], color = 'red' if road.repair_cost > 0 else 'slategray'
-, linestyle='-', linewidth=2)
+
+        if road.id in repaired:
+            plt.plot([start_x, end_x], [start_y, end_y],
+                color='black', linestyle='-', linewidth=5, zorder=2)
+
+        plt.plot([start_x, end_x], [start_y, end_y],
+                 color='red' if road.repair_cost > 0 else 'slategray',
+                 linestyle='-', linewidth=2, zorder=3)
+
         if show_capacity:
             plt.text((start_x + end_x )/ 2, (start_y + end_y) / 2, f"{road.capacity}; {road.repair_cost}",
                             ha='center', va='center',
@@ -52,17 +61,17 @@ def plot_city(
 
     for index, field in enumerate(city.fields):
         plt.plot(field.x, field.y, color="green", linestyle='solid', linewidth=3,
-                marker='o')
+                marker='o', zorder=4)
         plt.text(field.x + 0.1, field.y + 0.1, f"Pole nr: {index + 1}")
 
     for index, brewery in enumerate(city.breweries):
         plt.plot(brewery.x, brewery.y, color="red", linestyle='solid', linewidth=3,
-                marker='o')
+                marker='o', zorder=4)
         plt.text(brewery.x + 0.1, brewery.y + 0.1, f"Browar nr: {index + 1}")
 
     for index, inn in enumerate(city.inns):
         plt.plot(inn.x, inn.y, color="blue", linestyle='solid', linewidth=3,
-                marker='o')
+                marker='o', zorder=4)
         plt.text(inn.x + 0.1, inn.y + 0.1, f"Karczma nr: {index + 1}")
 
     plt.grid()
