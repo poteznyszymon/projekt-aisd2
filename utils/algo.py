@@ -1,6 +1,7 @@
 from collections import deque
 from itertools import combinations
 import math
+import concurrent.futures
 
 class GraphEK:
     def __init__(self, N):
@@ -84,27 +85,22 @@ def bruteforce(city):
             # Dodanie krawędzi ze źródła do pól (jęczmień)
             for f in city.fields:
                 g.add_edge(source, barley_nodes[(f.x, f.y)], f.sector_yield)
-            # Dodanie krawędzi pomiędzy punktami (jęczmień)
+            # Dodanie krawędzi pomiędzy punktami
             for r in roads:
                 if r.id in repaired:
                     u0, v0 = tuple(r.start), tuple(r.end)
-                    if u0 in barley_nodes and v0 in barley_nodes:
-                        u, v = barley_nodes[u0], barley_nodes[v0]
-                        g.add_edge(u, v, r.capacity)
-                        g.add_edge(v, u, r.capacity)
+                    u, v = barley_nodes[u0], barley_nodes[v0]
+                    g.add_edge(u, v, r.capacity)
+                    g.add_edge(v, u, r.capacity)
+
+                    u, v = beer_nodes[u0], beer_nodes[v0]
+                    g.add_edge(u, v, r.capacity)
+                    g.add_edge(v, u, r.capacity)
             # Przetworzenie jęczmienia na piwo w browarach
             for b in city.breweries:
                 u = barley_nodes[(b.x, b.y)]
                 v = beer_nodes[(b.x, b.y)]
                 g.add_edge(u, v, b.capacity)
-            # Dodanie krawędzi pomiędzy punktami (piwo)
-            for r in roads:
-                if r.id in repaired:
-                    u0, v0 = tuple(r.start), tuple(r.end)
-                    if u0 in beer_nodes and v0 in beer_nodes:
-                        u, v = beer_nodes[u0], beer_nodes[v0]
-                        g.add_edge(u, v, r.capacity)
-                        g.add_edge(v, u, r.capacity)
             # Dodanie krawędzi z karczm do ujścia
             for inn in city.inns:
                 u = beer_nodes[(inn.x, inn.y)]
