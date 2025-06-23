@@ -56,9 +56,9 @@ def plot_city(
         start_x, start_y = road.start
         end_x, end_y = road.end
 
-        if road.capacity > 50:
-            if road.id in repaired:
-                plt.plot([start_x, end_x], [start_y, end_y],
+
+        if road.id in repaired:
+            plt.plot([start_x, end_x], [start_y, end_y],
                     color='black', linestyle='-', linewidth=5, zorder=2)
 
 

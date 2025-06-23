@@ -1,7 +1,7 @@
 from collections import deque
 from itertools import combinations
 import math
-import concurrent.futures
+import time
 
 class GraphEK:
     def __init__(self, N):
@@ -75,6 +75,7 @@ def bruteforce(city):
     total_supply = sum(f.sector_yield for f in city.fields)
     max_flow, min_cost, used_roads = -1, math.inf, set()
 
+    time_start = time.time()
     for rcount in range(len(paid_ids) + 1):
         for combo in combinations(paid_ids, rcount):
             repaired = zero_set.union(combo)
@@ -110,5 +111,5 @@ def bruteforce(city):
                 max_flow, min_cost, used_roads = flow, cost_combo, repaired
         if max_flow == total_supply:
             break
-
-    return max_flow, min_cost, used_roads
+    time_end = time.time()
+    return max_flow, min_cost, used_roads, time_end - time_start

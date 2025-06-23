@@ -11,7 +11,7 @@ from utils.coding_encoding import decode_huffman
 
 def main():
     start = time.time()
-    DATA_DIR = os.path.join(os.path.dirname(__file__), "data/example_6_1")
+    DATA_DIR = os.path.join(os.path.dirname(__file__), "data/example_6_2")
     city = City()
     city.load_fields_from_json(os.path.join(DATA_DIR, 'fields.json'))
     city.load_breweries_from_json(os.path.join(DATA_DIR, 'breweries.json'))
@@ -47,7 +47,7 @@ def main():
     print(f"Czas wykonania: {used_time_1:.4f} sekund")
 
     plotter.plot_city(city, show_capacity=True, max_flow=max_flow, min_cost=min_cost, repaired = used_roads)
-    #plotter.plot_city(city, show_capacity=True, max_flow=best_flow, min_cost=best_cost, repaired=best_subset)
+    plotter.plot_city(city, show_capacity=True, max_flow=best_flow, min_cost=best_cost, repaired=best_subset)
 
 
 if __name__ == "__main__":
